@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .role{
+        width:50%;
+        height:50%;
+        border:2px solid #0A014F;
+    }
+</style>
+<div class="container mt-5" id="register">
+    <h2>Sign up for a free account</h2>
+    <p class="lead">Select below the type of account you want to create</p>
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'student_signup' %}" class="btn btn-student btn-lg" role="button">
+                <img src="{% static 'img/student.jpg' %}" class="role">
+            </a>
+        </div>
+        <div class="col">
+            <a href="{% url 'teacher_signup' %}" class="btn btn-teacher btn-lg" role="button">
+                <img src="{% static 'img/teacher.jpg' %}" class="role">
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body{
+        background-color: #FAE8EB;
+    }
+    *{padding: 0; margin: 0; box-sizing: border-box;}
+
+    .header-top {
+        background: url('https://thumbs.dreamstime.com/b/top-view-wood-office-desk-table-flat-lay-workspace-eye-glasses-coffee-cup-tree-pot-keyboard-mouse-computer-paper-clip-170279740.jpg');
+        text-align: center;
+        width: 100%;
+        height: auto;
+        background-size: cover;
+        background-attachment: fixed;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 85% 85% / 30%;
+    }
+    .header-top .overlay-header{
+        width: 100%;
+        height: 100%;
+        padding: 50px;
+        color: #FFF;
+        text-shadow: 1px 1px 1px #333;
+        background-image: linear-gradient( 135deg, #9f05ff69 10%, #fd5e086b 100%);
+        
+    }
+
+    h1 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 80px;
+        margin-bottom: 30px;
+    }
+
+    h3, h4 {
+        font-family: 'Nunito', sans-serif;
+        margin-bottom: 30px;
+    }
+
+    .main-heading{
+        font-family: 'Poppins', sans-serif;
+        font-size: 48px;
+        color:#8568BC;
+    }
+
+    .main-text{
+        font-family: 'Nunito',sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color:#564145;
+    }
+    .img-fixed{
+        width: 100%;
+    }
+    .read-more{
+        border: none;
+        outline: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        color: #fff;
+        background-color: #0A014F;
+        margin-bottom: 50px;
+        box-shadow: 0 3px 20px 0 #0000003b;
+    }
+    .read-more:hover{
+        cursor: pointer;
+        text-decoration: none;
+    }
+    .about{
+        margin-top:10%;
+    }
+    .card{
+        background-color:#E6C4FF;
+        margin-bottom:20%;
+        padding:5%;
+    }
+    .card-heading{
+        font-family: 'Poppins',sans-serif;
+        font-size: 24px;
+        text-align: center;
+        color:#AD578F;
+    }
+    .card-text{
+        font-family: 'Nunito',sans-serif;
+        font-size: 18px;
+        font-weight: 600;
+        color:#564145; 
+        text-align: center;
+    }
+    .card-btn{
+        text-decoration: none;
+        border-radius:4px;
+        background-color: #0A014F;
+        padding:10px;
+        color:white;
+        width:30%;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+}
+@media screen and (max-device-width: 450px){
+    h1{
+        font-size:60px;
+    }      
+}
+</style>
+<div class="header-top">
+    <div class="overlay-header">
+        <h1>Welcome to ClassDeck</h1>
+        <h3>The Best virtual Classroom</h3>
+        <h4>Learn Anytime... Anywhere..</h4>
+        <br>
+        <a class="read-more" href="#about">READ MORE</a>
+    </div>
+</div>
+<div class="container">
+    <div class="about" id="about">
+        <div class="row">
+            <div class="col-lg-6 col-12 col-sm-12 col-md-6">
+                <p class="main-heading">About</p>
+                <div style="border-bottom: 4px solid #8568BC;width:15%"></div>
+                <p class="main-text" style="margin-top: 10%;">Now-a-days Traditional method of teaching are replaced by virtual or online sessions. In these sessions, tutors and learners are interconnected through the internet, and the online learning environment is called virtual classrooms. Students connect with teachers anywhere, anytime through interactive online platform virtually. New tools like online Assignments & Tests, video conferencing are needs for this new-age learning method. Virtual classrooms break the synchronous hurdles of location, place, student limits and cater the knowledge to the learning crowd.</p>
+            </div>
+            <div class="col-lg-6 col-12 col-sm-12 col-md-6">
+                <img class="img-fixed" style="border-radius: 20%;" src="{% static 'img/about-us.jpg' %}">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
