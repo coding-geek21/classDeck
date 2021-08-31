@@ -26,22 +26,28 @@
     <p class="lead">Complete Your assignments & Tests.. Attend classes and Enjoy Learning.</p>
     <hr class="my-4">
     <p class="lead">
-        <a class="btn btn-primary btn-lg" href="#" role="button">Start Learning</a>
+        <a class="btn btn-primary btn-lg" href="#here" role="button">Start Learning</a>
     </p>
 </div>
 <div class="container mb-5">
-    <div class="row" style="text-align: center;margin-bottom: 5%;">
+    <h1>Your Subjects</h1>
+    <ul>
         {% for subject in user.student.interests.all %}
+        <li>{{subject}}</li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="container mb-5" id="here">
+    <div class="row">
         <div class="col-lg-4 col-sm-12 col-12">
             <div class="card text-center" style="width:15rem;height:15rem;">
                 <div class="card-body">
-                    <a href="#">
-                        <h5 class="card-title">{{subject}}</h5>
+                    <a href="{% url 'students:quiz_list' %}">
+                        <h5 class="card-title">Your Tests</h5>
                     </a>
                 </div>
             </div>
         </div>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}
