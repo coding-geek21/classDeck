@@ -8,8 +8,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
-
+                                  UpdateView,TemplateView)
+from django.views import View
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
 from ..models import Answer, Question, Quiz, User
@@ -29,6 +29,10 @@ class TeacherSignUpView(CreateView):
         login(self.request, user)
         return redirect('teachers:quiz_change_list')
 
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class HomeView(TemplateView):
+    template_name = 'classroom/teachers/teacher_home.html'
 
 @method_decorator([login_required, teacher_required], name='dispatch')
 class QuizListView(ListView):
@@ -124,10 +128,6 @@ class QuizResultsView(DetailView):
 @login_required
 @teacher_required
 def question_add(request, pk):
-    # By filtering the quiz by the url keyword argument `pk` and
-    # by the owner, which is the logged in user, we are protecting
-    # this view at the object-level. Meaning only the owner of
-    # quiz will be able to add questions to it.
     quiz = get_object_or_404(Quiz, pk=pk, owner=request.user)
 
     if request.method == 'POST':
@@ -147,18 +147,12 @@ def question_add(request, pk):
 @login_required
 @teacher_required
 def question_change(request, quiz_pk, question_pk):
-    # Simlar to the `question_add` view, this view is also managing
-    # the permissions at object-level. By querying both `quiz` and
-    # `question` we are making sure only the owner of the quiz can
-    # change its details and also only questions that belongs to this
-    # specific quiz can be changed via this url (in cases where the
-    # user might have forged/player with the url params.
     quiz = get_object_or_404(Quiz, pk=quiz_pk, owner=request.user)
     question = get_object_or_404(Question, pk=question_pk, quiz=quiz)
 
     AnswerFormSet = inlineformset_factory(
-        Question,  # parent model
-        Answer,  # base model
+        Question, 
+        Answer, 
         formset=BaseAnswerInlineFormSet,
         fields=('text', 'is_correct'),
         min_num=2,

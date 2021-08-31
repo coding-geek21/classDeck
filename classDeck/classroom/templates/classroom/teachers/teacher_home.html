@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<style>
+   .jumbotron {
+        background-image: url('https://i.ibb.co/jz5tp65/jumbotron.jpg') !important;
+        background-size: cover;
+        color:white;
+        text-align: center;
+   }
+   .card{
+       background-image:url('https://i.ibb.co/YBWTL0g/subjects.jpg');
+       color:wheat;
+   }
+   .card-title{
+       margin-top:40%;
+       text-decoration: none;
+       color:white;
+   }
+</style>
+<div class="jumbotron">
+    <hr class="my-4">
+    <h1 class="display-4">Welcome {{user.username}}</h1>
+    <p class="lead">Post assignments, Conduct Tests and Teach online at your Ease.</p>
+    <hr class="my-4">
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="#" role="button">Start Teaching</a>
+    </p>
+</div>
+<div class="container mb-5">
+    <div class="row" style="text-align: center;margin-bottom: 5%;">
+        <div class="col-lg-4 col-sm-12 col-12">
+            <div class="card text-center" style="width:15rem;height:15rem;">
+                <div class="card-body">
+                    <a href="{% url 'teachers:quiz_change_list' %}">
+                        <h5 class="card-title">Create & Manage Tests</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-12 col-12">
+            <div class="card text-center" style="width:15rem;height:15rem;">
+                <div class="card-body">
+                    <a href="{% url 'teachers:quiz_change_list' %}">
+                        <h5 class="card-title">Create & Manage Assignemnts</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-12 col-12">
+            <div class="card text-center" style="width:15rem;height:15rem;">
+                <div class="card-body">
+                    <a href="{% url 'teachers:quiz_change_list' %}">
+                        <h5 class="card-title">Calendar</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -17,12 +17,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
-        {% if user.is_authenticated and user.is_teacher %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/teachers.css' %}">
-        {% else %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/students.css' %}">
-        {% endif %}
         <style>  
             body{
             background-color: #FAE8EB;
