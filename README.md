@@ -210,7 +210,7 @@ python manage.py runserver
 <br>
 <table>
 <tr>
-<td align="center" ><a href="https://github.com/coding-geek21"><img src="https://avatars.githubusercontent.com/u/65439761?v=4" width=150px height=150px /></a></br> <h4 style="color:white;">Jayapritha N</h4>
+<td align="center" ><a href="https://github.com/coding-geek21"><img src="https://avatars.githubusercontent.com/u/53329034?s=400&u=bc78468dc0c164cd9605f7ed16709d35bc25205e&v=4" width=150px height=150px /></a></br> <h4 style="color:white;">Jayapritha N</h4>
 
 </tr>
 </table>
