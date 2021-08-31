@@ -8,3 +8,4 @@ psycopg2==2.8.6
 six
 django-cloudinary-storage
 django-crispy-forms
+django-allauth

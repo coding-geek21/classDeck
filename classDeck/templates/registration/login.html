@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-
 {% load crispy_forms_tags %}
 
 {% block content %}
+{% load socialaccount %}
 
   {% if form.non_field_errors %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -24,6 +24,12 @@
           {{ form.username|as_crispy_field }}
           {{ form.password|as_crispy_field }}
           <button type="submit" class="btn btn-primary">Log in</button>
+          <br>
+          <p class="text-center"> or </p>
+          <hr>
+         
+          <br>
+          <a href="{% provider_login_url 'google' %}" class="btn btn-danger"><i class="bi bi-google"></i>&ThinSpace; Login With Google</a>
         </form>
       </div>
     </div>

@@ -2,10 +2,11 @@ from django.urls import include, path
 from django import urls
 from django.contrib import admin
 from .views import classroom, students, teachers
+from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('acc/', include('allauth.urls')),
     path('', classroom.home, name='home'),
 
     path('students/', include(([
