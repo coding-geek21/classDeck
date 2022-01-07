@@ -8,7 +8,6 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView , TemplateView
 
-from ..decorators import student_required
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
 from ..models import Quiz, Student, TakenQuiz, User
 
@@ -22,18 +21,18 @@ class StudentSignUpView(CreateView):
         kwargs['user_type'] = 'student'
         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form):
+    def form_valid(self, form, backend='django.contrib.auth.backends.ModelBackend'):
         user = form.save()
-        login(self.request, user)
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('students:quiz_list')
 
 
-@method_decorator([login_required, student_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class HomeView(TemplateView):
     template_name = 'classroom/students/student_home.html'
 
 
-@method_decorator([login_required, student_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class StudentInterestsView(UpdateView):
     model = Student
     form_class = StudentInterestsForm
@@ -48,7 +47,7 @@ class StudentInterestsView(UpdateView):
         return super().form_valid(form)
 
 
-@method_decorator([login_required, student_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class QuizListView(ListView):
     model = Quiz
     ordering = ('name', )
@@ -66,7 +65,7 @@ class QuizListView(ListView):
         return queryset
 
 
-@method_decorator([login_required, student_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class TakenQuizListView(ListView):
     model = TakenQuiz
     context_object_name = 'taken_quizzes'
@@ -80,7 +79,6 @@ class TakenQuizListView(ListView):
 
 
 @login_required
-@student_required
 def take_quiz(request, pk):
     quiz = get_object_or_404(Quiz, pk=pk)
     student = request.user.student

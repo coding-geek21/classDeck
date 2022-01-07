@@ -26,15 +26,15 @@ class TeacherSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user)
+        login(self.request, user,backend='django.contrib.auth.backends.ModelBackend')
         return redirect('teachers:quiz_change_list')
 
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class HomeView(TemplateView):
     template_name = 'classroom/teachers/teacher_home.html'
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class QuizListView(ListView):
     model = Quiz
     ordering = ('name', )
@@ -49,7 +49,7 @@ class QuizListView(ListView):
         return queryset
 
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class QuizCreateView(CreateView):
     model = Quiz
     fields = ('name', 'subject', )
@@ -63,7 +63,7 @@ class QuizCreateView(CreateView):
         return redirect('teachers:quiz_change', quiz.pk)
 
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required], name='dispatch')
 class QuizUpdateView(UpdateView):
     model = Quiz
     fields = ('name', 'subject', )
@@ -86,7 +86,7 @@ class QuizUpdateView(UpdateView):
         return reverse('teachers:quiz_change', kwargs={'pk': self.object.pk})
 
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required ], name='dispatch')
 class QuizDeleteView(DeleteView):
     model = Quiz
     context_object_name = 'quiz'
@@ -102,7 +102,7 @@ class QuizDeleteView(DeleteView):
         return self.request.user.quizzes.all()
 
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required ], name='dispatch')
 class QuizResultsView(DetailView):
     model = Quiz
     context_object_name = 'quiz'
@@ -182,7 +182,7 @@ def question_change(request, quiz_pk, question_pk):
     })
 
 
-@method_decorator([login_required, teacher_required], name='dispatch')
+@method_decorator([login_required   ], name='dispatch')
 class QuestionDeleteView(DeleteView):
     model = Question
     context_object_name = 'question'

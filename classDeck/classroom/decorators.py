@@ -8,6 +8,7 @@ def student_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, log
         login_url=login_url,
         redirect_field_name=redirect_field_name
     )
+    print("Student Decorator used")
     if function:
         return actual_decorator(function)
     return actual_decorator
