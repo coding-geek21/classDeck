@@ -8,7 +8,7 @@ Please answer the following questions for yourself before submitting an issue. *
 
 # Expected Behavior
 
-Please describe the behavior you are expecting
+Please describe the behavior you are expecting.
 
 # Current Behavior
 
