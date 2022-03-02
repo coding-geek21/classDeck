@@ -11,6 +11,8 @@ from django.views.generic import CreateView, ListView, UpdateView , TemplateView
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
 from ..models import Quiz, Student, TakenQuiz, User
 
+from ..forms import StudentSignUpForm
+
 
 class StudentSignUpView(CreateView):
     model = User
@@ -119,3 +121,17 @@ def take_quiz(request, pk):
         'form': form,
         'progress': progress
     })
+
+
+def StudentRegister(request):
+    if request.method=="POST":
+        form=StudentSignUpForm(request.POST)
+        if form.is_valid():
+            form.save();
+            username=form.cleaned_data.get('username')
+            messages.success(request,f'Account created for {username}')
+            return render('home')
+        else:
+            form=StudentSignUpForm()
+        return render(request,'registration/register.html',{'form':form})
+
