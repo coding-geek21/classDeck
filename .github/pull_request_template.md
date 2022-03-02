@@ -8,7 +8,7 @@
 
     Explain the details for making this change. What existing problem does the pull request solve?
 
-    Please link related issues on creating a PR
+    Please link related issues on creating a pull request
 ## Template 
 
     Bug Description: Clearly and concisely describe the problem
