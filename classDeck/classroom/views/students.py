@@ -22,11 +22,27 @@ class StudentSignUpView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
         return super().get_context_data(**kwargs)
+    
+       
+    def student_signup(self,reqest):
+        if request.method=="POST":
+            print("in")
+            form=StudentSignUpForm(reqest.post)
+            if form.is_valid():
+                form.save()
+                username=form.cleaned_data.get('username')
+                messages.success(request,f'Account Successfully created for {username}')
+                return "User successfully created"
+            else:
+                form=StudentSignUpForm()
+                return render(request,'registration/signup_form.html',{'form':form})
 
     def form_valid(self, form, backend='django.contrib.auth.backends.ModelBackend'):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('students:quiz_list')
+ 
+
 
 
 @method_decorator([login_required], name='dispatch')
@@ -123,15 +139,15 @@ def take_quiz(request, pk):
     })
 
 
-def StudentRegister(request):
-    if request.method=="POST":
-        form=StudentSignUpForm(request.POST)
-        if form.is_valid():
-            form.save();
-            username=form.cleaned_data.get('username')
-            messages.success(request,f'Account created for {username}')
-            return render('home')
-        else:
-            form=StudentSignUpForm()
-        return render(request,'registration/register.html',{'form':form})
+# def StudentRegister(request):
+#     if request.method=="POST":
+#         form=StudentSignUpForm(request.POST)
+#         if form.is_valid():
+#             form.save();
+#             username=form.cleaned_data.get('username')
+#             messages.success(request,f'Account created for {username}')
+#             return "User successfully created"
+#         else:
+#             form=StudentSignUpForm()
+#         return render(request,'registration/signup_form.html',{'form':form})
 
