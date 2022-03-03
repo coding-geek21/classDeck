@@ -1,3 +1,12 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 ## Prerequisites
 
 Please answer the following questions for yourself before submitting an issue. **YOU MAY DELETE THE PREREQUISITES SECTION.**
@@ -8,8 +17,8 @@ Please answer the following questions for yourself before submitting an issue. *
 
 ## Define You
 
-[ ] GSSoC22 Participant
-[ ] Contributor
+- [ ] GSSoC22 Participant
+- [ ] Contributor
 
 
 ## Is your feature request related to a problem? Please describe.
@@ -26,7 +35,7 @@ A clear and concise description of any alternative solutions or features you've 
 
 ## Approach to be followed (optional):
 
-A clear and concise description of approach to be followed.
+A clear and concise description of the approach to be followed.
 
 ## Additional context
 
