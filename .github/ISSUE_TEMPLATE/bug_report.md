@@ -8,8 +8,8 @@ Please answer the following questions for yourself before submitting an issue. *
 
 ## Define You
 
-[ ] GSSoC22 Participant
-[ ] Contributor
+- [ ] GSSoC22 Participant
+- [ ] Contributor
 
 
 ## Describe the bug
