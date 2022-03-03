@@ -1,4 +1,5 @@
 from importlib.resources import path
+from lib2to3.pgen2 import token
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -14,7 +15,11 @@ from ..models import Quiz, Student, TakenQuiz, User
 
 from ..forms import StudentSignUpForm
 from django.core.mail import EmailMessage
-
+from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from ..utils import token_generator
 
 class StudentSignUpView(CreateView):
     model = User
@@ -39,6 +44,11 @@ class StudentSignUpView(CreateView):
         # -relative url to verification
         # -encode uid
         # -token
+        
+        uidb64=force_bytes(urlsafe_base64_encode(user.pk))
+
+        domain=get_current_site(request).domain
+        link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token})
 
 
         email = EmailMessage(
@@ -151,3 +161,7 @@ def take_quiz(request, pk):
 
 
 
+class VerificationView(TemplateView):
+    def get(self,request,uidb64,token):
+
+        return redirect('registration/signup_form.html')
