@@ -1,63 +1,150 @@
-{% extends 'base.html' %}
-
-{% load crispy_forms_tags %}
-
-{% block content %}
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
 <style>
-   .jumbotron {
-        background-image: url('https://i.ibb.co/jz5tp65/jumbotron.jpg') !important;
-        background-size: cover;
-        color:white;
-        text-align: center;
-   }
-   .card{
-       background-image:url('https://i.ibb.co/YBWTL0g/subjects.jpg');
-       color:wheat;
-   }
-   .card-title{
-       margin-top:40%;
-       text-decoration: none;
-       color:white;
-   }
+  .jumbotron {
+    background-image: url("https://i.ibb.co/jz5tp65/jumbotron.jpg") !important;
+    background-size: cover;
+    color: white;
+    text-align: center;
+  }
+  .card {
+    background-image: url("https://i.ibb.co/YBWTL0g/subjects.jpg");
+    color: wheat;
+  }
+  .cardTitle {
+    margin-top: 40%;
+    text-decoration: none;
+    color: white;
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+  .container .card {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin: 10px;
+    
+  }
+
+  .container .card::before {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    width: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+  }
+  .container .card .cardTitle {
+    position: relative;
+    color: #fff;
+    z-index: 2;
+    opacity: 0.5;
+    font-weight: 300;
+    letter-spacing: 1px;
+    transition: 0.5s;
+  }
+  .container .card:hover .cardTitle {
+    opacity: 1;
+  }
+  .cardTitle {
+    text-decoration: none;
+    background: linear-gradient(to right, #ccc 50%, #f05d87 50%, #fae8eb);
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: 0.5s ease-out;
+    text-shadow: 1px;
+  }
+
+  .cardTitle:hover {
+    background-position: -100%;
+  }
+  .btn {
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    background-color: #f05d87;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+  .btn:hover {
+    color: black;
+    background-color: #f1d1d6;
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .btn-primary:focus {
+    background-color: #f05d87;
+  }
+
+
+  .card-body {
+    padding: 10px;
+    margin: 10px;
+  }
+  #mycontent:hover {
+    text-decoration: none;
+  }
+  /* .center{
+    padding-left: 10px;
+  } */
+  a:hover{
+    text-decoration: none;
+  }
+
 </style>
 <div class="jumbotron">
-    <hr class="my-4">
-    <h1 class="display-4">Welcome {{user.username}}</h1>
-    <p class="lead">Post assignments, Conduct Tests and Teach online at your Ease.</p>
-    <hr class="my-4">
-    <p class="lead">
-        <a class="btn btn-primary btn-lg" href="#here" role="button">Start Teaching</a>
-    </p>
+  <hr class="my-4" />
+  <h1 class="display-4">Welcome {{user.username}}</h1>
+  <p class="lead">
+    Post assignments, Conduct Tests and Teach online at your Ease.
+  </p>
+  <hr class="my-4" />
+  <p class="lead">
+    <a class="btn" href="#here" role="button">Start Teaching</a>
+  </p>
 </div>
 <div class="container mb-5" id="here">
-    <div class="row" style="text-align: center;margin-bottom: 5%;">
-        <div class="col-lg-4 col-sm-12 col-12">
-            <div class="card text-center" style="width:15rem;height:15rem;">
-                <div class="card-body">
-                    <a href="{% url 'teachers:quiz_change_list' %}">
-                        <h5 class="card-title">Create & Manage Tests</h5>
-                    </a>
-                </div>
-            </div>
+  <div class="row" style="text-align: center; margin-bottom: 5%">
+    <div class="center col-lg-4 col-sm-12 col-12">
+      <div class="card text-center" style="width: 15rem; height: 15rem">
+        <div class="card-body">
+          <a href="{% url 'teachers:quiz_change_list' %}">
+            <h5 id="mycontent" class="cardTitle">Create & Manage Tests</h5>
+          </a>
         </div>
-        <div class="col-lg-4 col-sm-12 col-12">
-            <div class="card text-center" style="width:15rem;height:15rem;">
-                <div class="card-body">
-                    <a href="#">
-                        <h5 class="card-title">Create & Manage Assignemnts</h5>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-sm-12 col-12">
-            <div class="card text-center" style="width:15rem;height:15rem;">
-                <div class="card-body">
-                    <a href="#">
-                        <h5 class="card-title">Calendar</h5>
-                    </a>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="center col-lg-4 col-sm-12 col-12">
+      <div class="card text-center" style="width: 15rem; height: 15rem">
+        <div class="card-body">
+          <a href="#">
+            <h5 class="cardTitle">Create & Manage Assignemnts</h5>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="center col-lg-4 col-sm-12 col-12">
+      <div class="card text-center" style="width: 15rem; height: 15rem">
+        <div class="card-body">
+          <a href="#">
+            <h5 class="cardTitle">Calendar</h5>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
