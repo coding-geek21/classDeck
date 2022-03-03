@@ -11,7 +11,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ next }}">
                 {{ form|crispy }}
-                <a href="{% url 'student_signup' %}"><button type="submit" class="btn btn-success">Sign up</button></a>
+        <button type="submit" class="btn btn-success">Sign up</button>
             </form>
         </div>
     </div>

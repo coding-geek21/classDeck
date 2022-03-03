@@ -192,3 +192,9 @@ CLOUDINARY_STORAGE ={
     'API_KEY': '836163491581617',
     'API_SECRET': 'eid0AVwRnP95CHVyRuAhVQ9Z0FY'
 }
+
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'dbmsprojekt@gmail.com'
+EMAIL_HOST_PASSWORD = 'dbms@project123'

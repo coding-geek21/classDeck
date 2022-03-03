@@ -1,3 +1,4 @@
+from importlib.resources import path
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -12,6 +13,7 @@ from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
 from ..models import Quiz, Student, TakenQuiz, User
 
 from ..forms import StudentSignUpForm
+from django.core.mail import EmailMessage
 
 
 class StudentSignUpView(CreateView):
@@ -24,21 +26,29 @@ class StudentSignUpView(CreateView):
         return super().get_context_data(**kwargs)
     
        
-    def student_signup(self,reqest):
-        if request.method=="POST":
-            print("in")
-            form=StudentSignUpForm(reqest.post)
-            if form.is_valid():
-                form.save()
-                username=form.cleaned_data.get('username')
-                messages.success(request,f'Account Successfully created for {username}')
-                return "User successfully created"
-            else:
-                form=StudentSignUpForm()
-                return render(request,'registration/signup_form.html',{'form':form})
 
     def form_valid(self, form, backend='django.contrib.auth.backends.ModelBackend'):
         user = form.save()
+        userEmail=user.email
+        print(user.email)
+        user.is_active=False
+        email_subject="Activate your account"
+        email_body='Test body'
+        # path to view
+        # - getting domain we are on
+        # -relative url to verification
+        # -encode uid
+        # -token
+
+
+        email = EmailMessage(
+    email_subject,
+    email_body,
+    'noreply@classDeck.com',
+    [userEmail],
+   
+)
+        email.send(fail_silently=False)
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('students:quiz_list')
  
@@ -139,15 +149,5 @@ def take_quiz(request, pk):
     })
 
 
-# def StudentRegister(request):
-#     if request.method=="POST":
-#         form=StudentSignUpForm(request.POST)
-#         if form.is_valid():
-#             form.save();
-#             username=form.cleaned_data.get('username')
-#             messages.success(request,f'Account created for {username}')
-#             return "User successfully created"
-#         else:
-#             form=StudentSignUpForm()
-#         return render(request,'registration/signup_form.html',{'form':form})
+
 
