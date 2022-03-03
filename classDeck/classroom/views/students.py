@@ -1,5 +1,6 @@
 from importlib.resources import path
 from lib2to3.pgen2 import token
+from xml import dom
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -20,6 +21,8 @@ from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from ..utils import token_generator
+from django.shortcuts import render
+from django import forms
 
 class StudentSignUpView(CreateView):
     model = User
@@ -37,19 +40,24 @@ class StudentSignUpView(CreateView):
         userEmail=user.email
         print(user.email)
         user.is_active=False
+        user.save()
+      
         email_subject="Activate your account"
-        email_body='Test body'
+       
         # path to view
         # - getting domain we are on
         # -relative url to verification
         # -encode uid
         # -token
         
-        uidb64=force_bytes(urlsafe_base64_encode(user.pk))
+        uidb64=urlsafe_base64_encode(force_bytes(user.pk))
 
-        domain=get_current_site(request).domain
-        link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token})
-
+        domain=get_current_site(self.request).domain
+        print(domain)
+        link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
+        print(link)
+        activate_url='http://'+domain+link
+        email_body='Hi '+user.username+ ' Please use this link to verify your account\n' + activate_url 
 
         email = EmailMessage(
     email_subject,
@@ -57,10 +65,12 @@ class StudentSignUpView(CreateView):
     'noreply@classDeck.com',
     [userEmail],
    
-)
+)       
+        
         email.send(fail_silently=False)
-        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('students:quiz_list')
+        return render(self.request,'registration/login.html')
+        # login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        # return redirect('students:quiz_list')
  
 
 
@@ -164,4 +174,18 @@ def take_quiz(request, pk):
 class VerificationView(TemplateView):
     def get(self,request,uidb64,token):
 
-        return redirect('registration/signup_form.html')
+        try:
+
+            id=force_text(urlsafe_base64_decode(uidb64))
+            user=User.objects.get()
+            user=User.objects.get(pk=id)
+
+            if user.is_active:
+                return redirect('registration/login.html')
+            user.is_active=True
+            user.save()
+            messages.success(request,"Account activated successfully")
+        except expression as identifier:
+            pass
+        return redirect('registration/login.html')
+

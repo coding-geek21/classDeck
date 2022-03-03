@@ -13,6 +13,15 @@ from django.views import View
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
 from ..models import Answer, Question, Quiz, User
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from ..utils import token_generator
+from django.shortcuts import render
+from django import forms
+
 
 
 class TeacherSignUpView(CreateView):
@@ -26,8 +35,37 @@ class TeacherSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user,backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('teachers:quiz_change_list')
+        user.is_active=False
+        user.save()
+      
+        email_subject="Activate your account"
+       
+        # path to view
+        # - getting domain we are on
+        # -relative url to verification
+        # -encode uid
+        # -token
+        
+        uidb64=urlsafe_base64_encode(force_bytes(user.pk))
+
+        domain=get_current_site(self.request).domain
+        link=reverse('students:activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
+        activate_url='http://'+domain+link
+        email_body='Hi '+user.username+ 'Please use this link to verify your account\n' + activate_url 
+
+        email = EmailMessage(
+    email_subject,
+    email_body,
+    'noreply@classDeck.com',
+    [userEmail],
+   
+)       
+        
+        email.send(fail_silently=False)
+        return render(self.request,'registration/login.html')
+        # login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        # login(self.request, user,backend='django.contrib.auth.backends.ModelBackend')
+        # return redirect('teachers:quiz_change_list')
 
 
 @method_decorator([login_required], name='dispatch')
@@ -205,3 +243,22 @@ class QuestionDeleteView(DeleteView):
     def get_success_url(self):
         question = self.get_object()
         return reverse('teachers:quiz_change', kwargs={'pk': question.quiz_id})
+
+
+
+class VerificationView(TemplateView):
+    def get(self,request,uidb64,token):
+
+        try:
+
+            id=force_text(urlsafe_base64_decode(uidb64))
+            user=User.objects.get()
+            user=User.objects.get(pk=id)
+
+            if user.is_active:
+                return redirect('registration/login.html')
+            user.is_active=True
+            user.save()
+        except expression as identifier:
+            pass
+        return redirect('registration/login.html')
