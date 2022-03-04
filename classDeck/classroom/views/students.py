@@ -58,7 +58,7 @@ class StudentSignUpView(CreateView):
 
         # domain=get_current_site(self.request).domain
         print(domain)
-        link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
+        link=reverse('activate1',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
         print(link)
         activate_url='http://'+domain+link
         email_body='Hi '+user.username+ ' Please use this link to verify your account\n' + activate_url 
