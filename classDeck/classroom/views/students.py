@@ -72,6 +72,7 @@ class StudentSignUpView(CreateView):
 )       
         
         email.send(fail_silently=False)
+        messages.success(self.request,"Check your mail to activate your account")
         return render(self.request,'registration/login.html')
         # login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         # return redirect('students:quiz_list')
@@ -174,7 +175,6 @@ def take_quiz(request, pk):
 
 
 
-
 class VerificationView(TemplateView):
     def get(self,request,uidb64,token):
         print('IN')
@@ -185,5 +185,8 @@ class VerificationView(TemplateView):
         user.is_active=True
         user.save()
         messages.success(request,"Account activated successfully")
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+         
        
-        return render(self.request,'registration/login.html')
+
+        return render(self.request,'classroom/students/student_home.html')
