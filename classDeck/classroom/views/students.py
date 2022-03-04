@@ -1,5 +1,5 @@
 from importlib.resources import path
-from lib2to3.pgen2 import token
+# from lib2to3.pgen2 import token
 from xml import dom
 from django.contrib import messages
 from django.contrib.auth import login
@@ -23,6 +23,7 @@ from django.urls import reverse
 from ..utils import token_generator
 from django.shortcuts import render
 from django import forms
+from django.contrib.sites.models import Site
 
 class StudentSignUpView(CreateView):
     model = User
@@ -51,8 +52,11 @@ class StudentSignUpView(CreateView):
         # -token
         
         uidb64=urlsafe_base64_encode(force_bytes(user.pk))
+        current_site = Site.objects.get_current()
+        # domain=current_site.domain
+        domain='localhost:8000'
 
-        domain=get_current_site(self.request).domain
+        # domain=get_current_site(self.request).domain
         print(domain)
         link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
         print(link)
@@ -173,19 +177,13 @@ def take_quiz(request, pk):
 
 class VerificationView(TemplateView):
     def get(self,request,uidb64,token):
+        print('IN')
+       
+        id=force_text(urlsafe_base64_decode(uidb64))
+        user=User.objects.get(pk=id)
 
-        try:
-
-            id=force_text(urlsafe_base64_decode(uidb64))
-            user=User.objects.get()
-            user=User.objects.get(pk=id)
-
-            if user.is_active:
-                return redirect('registration/login.html')
-            user.is_active=True
-            user.save()
-            messages.success(request,"Account activated successfully")
-        except expression as identifier:
-            pass
-        return redirect('registration/login.html')
-
+        user.is_active=True
+        user.save()
+        messages.success(request,"Account activated successfully")
+       
+        return render(self.request,'registration/login.html')
