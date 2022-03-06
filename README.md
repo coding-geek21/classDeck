@@ -217,7 +217,21 @@ python manage.py createsuperuser
 
 <details>
 <summary>
-Step 12: Running the Project in local server
+Step 12: Create env files from env templates
+</summary>
+<br>
+create a `.env` file in the folder where settings.py resides and copy paste the contents of `env_template` over there or else you can achieve the same using the follow commands in any bash like shell.
+```bash
+cd classDeck
+cp .env_template .env
+cd ..
+```
+
+</details>
+---
+<details>
+<summary>
+Step 13: Running the Project in local server
 </summary>
 <br>
 <b>Note:</b> Before running the project in local server, Make sure you activate the Virtual Environment.

@@ -23,5 +23,9 @@ urlpatterns = [
     path('accounts/signup/', classroom.SignUpView.as_view(), name='signup'),
     path('accounts/signup/student/', students.StudentSignUpView.as_view(), name='student_signup'),
     path('accounts/signup/teacher/', teachers.TeacherSignUpView.as_view(), name='teacher_signup'),
-    path('accounts/login',classroom.LoginView.as_view(),name='login')
+    path('accounts/login',classroom.LoginView.as_view(),name='login'),
+    path('students/activate/<uidb64>/<token>/',students.VerificationView.as_view(),name="activate1"),
+     path('teachers/activate/<uidb64>/<token>/',teachers.VerificationView.as_view(),name="activate")
+    #  path('accounts/register/student',classroom.LoginView.student_signup,name='register'),
+
 ]
