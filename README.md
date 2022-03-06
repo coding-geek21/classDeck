@@ -1,4 +1,33 @@
+
+  
 # ClassDeck
+
+## Introduction 📜
+
+ClassDeck aims to provide a virtual classroom that breaks the synchronous hurdles of location, place, student limits and cater the knowledge to the learning crowd anytime and anywhere. It is an all in one platform which makes the entire cycle of learning seamless for both educators and students. It also has a whole range of useful features that 
+help to make the whole learning process remote and through virtual platforms.
+
+### Features
+
+- Generate Virtual Classrooms Anytime
+- Educators can create assignments and quizes 
+- Students can view and submit Assignments
+- Keep Track of Student's progress
+- Enable Collaboration among students on specific topics
+- Tools and Utilities for ease of learning
+- Whiteboard for uploading useful content and materials
+- Events Calender to keep track of schedule
+
+### Tech Stack 💻
+
+</br>
+
+<img alt="Django" src="https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green"/> <img alt="HTML5" src="https://img.shields.io/badge/html5%20-%23E34F26.svg?&style=for-the-badge&logo=html5&logoColor=white"/> <img alt="CSS3" src="https://img.shields.io/badge/css3%20-%231572B6.svg?&style=for-the-badge&logo=css3&logoColor=white"/> <img alt="JavaScript" src="https://img.shields.io/badge/javascript%20-%23323330.svg?&style=for-the-badge&logo=javascript&logoColor=%23F7DF1E"/>
+
+
+
+</br>
+</br>
 
 ## Instructions to setup & Run:arrow_down::computer:
 
@@ -190,7 +219,63 @@ python manage.py createsuperuser
 
 <details>
 <summary>
-Step 12: Running the Project in local server
+Step 12: Create env files from env templates
+</summary>
+<br>
+1. Install Django Environ
+
+    $ pip install django-environ
+---
+1. Install Django Environ
+
+```
+$ pip install django-environ
+```
+2. Import environ in settings.py
+```
+import environ
+```
+3. Initialise environ
+Below your import in settings.py:
+```
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
+```
+4. Create your .env file
+
+In the same directory as settings.py, create a file called ‘.env’
+
+5. Declare your environment variables in .env
+
+Make sure you don’t use quotations around strings.
+
+6. IMPORTANT: Add your .env file to .gitignore
+
+7. Replace all references to your environment variables in settings.py
+```
+DATABASES = {
+‘default’: {
+‘ENGINE’: ‘django.db.backends.postgresql_psycopg2’,
+‘NAME’: env(‘DATABASE_NAME’),
+‘USER’: env(‘DATABASE_USER’),
+‘PASSWORD’: env(‘DATABASE_PASS’),
+}
+}
+```
+and 
+```
+SECRET_KEY = env(‘SECRET_KEY’)
+```
+---
+
+</details>
+
+---
+<details>
+<summary>
+Step 13: Running the Project in local server
 </summary>
 <br>
 <b>Note:</b> Before running the project in local server, Make sure you activate the Virtual Environment.
