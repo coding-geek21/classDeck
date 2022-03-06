@@ -222,10 +222,8 @@ python manage.py createsuperuser
 Step 12: Create env files from env templates
 </summary>
 <br>
-1. Install Django Environ
 
-    $ pip install django-environ
----
+
 1. Install Django Environ
 
 ```
@@ -270,6 +268,7 @@ SECRET_KEY = env(‘SECRET_KEY’)
 ---
 
 </details>
+
 
 ---
 <details>
