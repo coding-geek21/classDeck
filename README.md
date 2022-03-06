@@ -228,7 +228,9 @@ cd ..
 ```
 
 </details>
+
 ---
+
 <details>
 <summary>
 Step 13: Running the Project in local server
