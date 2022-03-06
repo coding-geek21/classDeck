@@ -220,7 +220,9 @@ python manage.py createsuperuser
 Step 12: Create env files from env templates
 </summary>
 <br>
-create a `.env` file in the folder where settings.py resides and copy paste the contents of `env_template` over there or else you can achieve the same using the follow commands in any bash like shell.
+
+create a `.env` file in the folder where settings.py resides and copy paste the contents of `.env_template` over there manually or else you can achieve the same using the follow commands in any bash like shell.
+
 ```bash
 cd classDeck
 cp .env_template .env
@@ -228,7 +230,9 @@ cd ..
 ```
 
 </details>
+
 ---
+
 <details>
 <summary>
 Step 13: Running the Project in local server
