@@ -190,7 +190,17 @@ python manage.py createsuperuser
 
 <details>
 <summary>
-Step 12: Running the Project in local server
+Step 12: Before Running the Project in the local host
+</summary>
+<br>
+<b>Note:</b> Before running the project in local server, copy the contents of the env file and use in the settings.py corresponding to places where the values has been used from the env.
+<br><br>
+
+</details>
+
+<details>
+<summary>
+Step 13: Running the Project in local server
 </summary>
 <br>
 <b>Note:</b> Before running the project in local server, Make sure you activate the Virtual Environment.
