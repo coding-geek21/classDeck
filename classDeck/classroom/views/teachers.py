@@ -1,3 +1,4 @@
+from tkinter.tix import Tree
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -10,9 +11,19 @@ from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView,TemplateView)
 from django.views import View
+
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
 from ..models import Answer, Question, Quiz, User
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from ..utils import token_generator
+from django.shortcuts import render
+from django import forms
+from django.contrib.sites.models import Site
 
 
 class TeacherSignUpView(CreateView):
@@ -26,8 +37,45 @@ class TeacherSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        login(self.request, user,backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('teachers:quiz_change_list')
+        userEmail=user.email
+        print(user.email)
+        user.is_active=False
+        user.save()
+      
+        email_subject="Activate your account"
+       
+        # path to view
+        # - getting domain we are on
+        # -relative url to verification
+        # -encode uid
+        # -token
+        
+        uidb64=urlsafe_base64_encode(force_bytes(user.pk))
+        current_site = Site.objects.get_current()
+        # domain=current_site.domain
+        domain='localhost:8000'
+
+        # domain=get_current_site(self.request).domain
+        print(domain)
+        link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
+        print(link)
+        activate_url='http://'+domain+link
+        email_body='Hi '+user.username+ ' Please use this link to verify your account\n' + activate_url 
+
+        email = EmailMessage(
+    email_subject,
+    email_body,
+    'noreply@classDeck.com',
+    [userEmail],
+   
+)       
+        
+        email.send(fail_silently=False)
+        messages.success(self.request,"Check your mail to activate your account")
+        return render(self.request,'registration/login.html')
+        # login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+        # return redirect('students:quiz_list')
+ 
 
 
 @method_decorator([login_required], name='dispatch')
@@ -205,3 +253,23 @@ class QuestionDeleteView(DeleteView):
     def get_success_url(self):
         question = self.get_object()
         return reverse('teachers:quiz_change', kwargs={'pk': question.quiz_id})
+
+
+
+
+class VerificationView(TemplateView):
+    def get(self,request,uidb64,token):
+        print('IN')
+       
+        id=force_text(urlsafe_base64_decode(uidb64))
+        user=User.objects.get(pk=id)
+
+        user.is_active=True
+        user.save()
+        messages.success(request,"Account activated successfully")
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+         
+       
+
+        return render(self.request,'classroom/teachers/teacher_home.html')
+  

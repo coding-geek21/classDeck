@@ -3,9 +3,12 @@ from django.views.generic import TemplateView
 from django.views import View
 from django.contrib import messages
 from django.contrib import auth
+from ..forms import StudentSignUpForm
 
 class SignUpView(TemplateView):
     template_name = 'registration/register.html'
+    
+
 
 
 def home(request):
@@ -48,6 +51,7 @@ class LoginView(View):
         messages.error(
             request, 'Please fill all the fields')
         return render(request,'registration/login.html')
+    
 
 
 
