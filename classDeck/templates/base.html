@@ -29,17 +29,17 @@
         }
         nav {
             overflow: hidden;
-            background-color: #333;
+            background: transparent;
             top: 0;
-            width: 50%;
-            height: 80px;
+            width: 20%;
+            height: 60px;
             position: fixed;
             /* FIX */
             z-index:300;
         }
-        .content {
+        /* .content {
             padding: 16px;
-        }
+        } */
 
 /* The sticky class is added to the navbar with JS when it reaches its scroll position */
         .sticky {
@@ -56,16 +56,16 @@
         nav a {
             float: left;
             display: block;
-            color: #f2f2f2;
+            color: #444141;
             text-align: center;
-            padding: 14px;
+            padding: 0px;
             text-decoration: none;
         }
         #header {
             
-            background-color: #511b58;
+            background: transparent;
             font-family: 'Nunito', sans-serif;
-            padding: 1%;
+        
         }
         
         footer {
@@ -107,46 +107,21 @@
             background-image: linear-gradient(15deg, #3b0958 0%, #dd27c5 100%);
         }
 /* CSS */
-        .button-63 {
-            align-items: center;
-            background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
-            border: 0;
-            border-radius: 8px;
-            box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-            box-sizing: border-box;
-            color: #FFFFFF;
-            display: flex;
-            font-family: Phantomsans, sans-serif;
-            font-size: 20px;
-            justify-content: center;
-            line-height: 1em;
-            max-width: 50px;
-            min-width: 40px;
-            padding: 19px 24px;
-            text-decoration: none;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            white-space: nowrap;
-            cursor: pointer;
+        
+        .navbar-fixed-top.scrolled {
+            background-color:  #0A014F !important;
+            transition: background-color 500ms linear;
         }
+        
 
-        .button-63:active,
-        .button-63:hover {
-            outline: 0;
-        }
-
-        @media (min-width: 768px) {
-        .button-63 {
-            font-size: 24px;
-            min-width: 40px;
-        }
+        nav.scrolled {
+            background: #0a0a0a;
         }
         /* Carousel styling */
         </style>
     </head>
     <body>
-        <nav id="header" class="navbar sticky navbar-expand bg-custom-2 navbar-light shadow-5-strong">
+        <nav id="header" class="navbar-fixed-top navbar sticky navbar-expand bg-custom-2 navbar-light shadow-5-strong">
             <div class="container-fluid">
                 <a class="navbar-brand logo" href="{% url 'home' %}">
                     <img src="{% static 'img/logo.png' %}" style="width:auto">
@@ -177,21 +152,26 @@
                             </p>
                         </li>
                         <li class="nav-item">
-                            <button class="button-63" role="button">
-                                <a class="nav-link" id="login-navbtn" href="{% url 'logout' %}">Log out</a>
-                            </button>
+                            <a class="nav-link" id="login-navbtn" href="{% url 'logout' %}">Log out</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link button-63" id="login-navbtn" href="{% url 'login' %}">Login</a>
+                            <a class="nav-link" id="login-navbtn" href="{% url 'login' %}">
+                                <b>Login</b>
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link button-63" id="login-navbtn" href="{% url 'signup' %}">Sign up</a>
+                            <a class="nav-link" id="login-navbtn" href="{% url 'signup' %}">
+                                <b>Sign up</b>
+                            </a>
                         </li>
                         {% endif %}
                     </ul>
                 </div>
             </div>
+        </nav>
+        <div>
+            {% block content %} {% endblock %}
             <div class="card-body">
                 {% for message in messages %}
                 <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
@@ -207,9 +187,6 @@
                 </div>
                 {% endfor %}
             </div>
-        </nav>
-        <div style="position:relative; margin-top: 80px;">
-            {% block content %} {% endblock %}
         </div>
         <footer style="margin-top:18%;">
             <p class="mt-2">Copyright © 2021 ClassDeck</p>
@@ -220,6 +197,28 @@
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script type="text/javascript"></script>
+        <script type="text/javascript">
+            var navbar = document.querySelector('nav')
+
+            // $(document).ready(function(){
+            // $(window).scroll(function(){
+            //     var scroll = $(window).scrollTop();
+            //     if (scroll > 300) {
+            //         $(".scroll").css("background" ,  "#0A014F");
+            //         $(".scroll").css("transition","background 200 ms")
+            //     }
+
+            //     else{
+            //         $(".scroll").css("background" , "transparent");  	
+            //     }
+            // })
+            // })
+            $(function () {
+  $(document).scroll(function () {
+    var $nav = $(".navbar-fixed-top");
+    $nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
+  });
+});
+        </script>
     </body>
 </html>
