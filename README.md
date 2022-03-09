@@ -193,9 +193,10 @@ cd classDeck
 cp .env_template .env
 cd ..
 ```
-
 </details>
+
 ---
+
 <details>
 <summary>
 Step 11: Making database migrations
