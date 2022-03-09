@@ -180,10 +180,25 @@ pip install -r requirements.txt
 </details>
 
 ---
-
 <details>
 <summary>
-Step 10: Making database migrations
+Step 10: Create env files from env templates
+</summary>
+<br>
+
+create a `.env` file in the folder where settings.py resides and copy paste the contents of `.env_template` over there manually or else you can achieve the same using the follow commands in any bash like shell.
+
+```bash
+cd classDeck
+cp .env_template .env
+cd ..
+```
+
+</details>
+---
+<details>
+<summary>
+Step 11: Making database migrations
 </summary>
 <br>
 
@@ -199,11 +214,12 @@ python manage.py migrate
 
 </details>
 
+
 ---
 
 <details>
 <summary>
-Step 11: Creating superuser to access Admin Panel
+Step 12: Creating superuser to access Admin Panel
 </summary>
 <br>
 
@@ -213,23 +229,6 @@ python manage.py createsuperuser
 
 </details>
 
----
-
-<details>
-<summary>
-Step 12: Create env files from env templates
-</summary>
-<br>
-
-create a `.env` file in the folder where settings.py resides and copy paste the contents of `.env_template` over there manually or else you can achieve the same using the follow commands in any bash like shell.
-
-```bash
-cd classDeck
-cp .env_template .env
-cd ..
-```
-
-</details>
 
 ---
 
