@@ -1,7 +1,10 @@
 <div id="top"></div>
 
+<div align="center">
+<h1 id="logo"><a href="/"><img src="https://raw.githubusercontent.com/coding-geek21/classDeck/develop/classDeck/static/img/logo.png" alt="logo" /> ClassDeck </a></h1>
+ </div>
 
-<h1 align="center"> ClassDeck </h1>
+
 
 <!-- ---------------------------------------------------------------------------------------------------------------------- -->
 
@@ -30,7 +33,7 @@
 <!-- ---------------------------------------------------------------------------------------------------------------------- -->
 
 <p align="center">
-    <a href="https://classdeck.herokuapp.com/"><strong>ZeroOctave Official site »</strong></a>
+    <a href="https://classdeck.herokuapp.com/"><strong>ClassDeck Official site »</strong></a>
     <br />
     <a href="https://github.com/coding-geek21/classDeck/issues">Report Bug</a>
     ·
