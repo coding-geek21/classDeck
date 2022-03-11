@@ -1,7 +1,7 @@
 <div id="top"></div>
 
 <div align="center">
-<h1 id="logo"><a href="/"><img src="https://raw.githubusercontent.com/coding-geek21/classDeck/develop/classDeck/static/img/logo.png" alt="logo" /> ClassDeck </a></h1>
+<a href="/"><img src="https://raw.githubusercontent.com/coding-geek21/classDeck/develop/classDeck/static/img/logo.png" alt="logo" /></a><h1 id="logo"> ClassDeck </a></h1>
  </div>
 
 
