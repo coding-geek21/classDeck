@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import include, path
-
-from classroom.views import classroom, students, teachers
+from django.contrib.auth import views as auth_views
+from classroom.views import classroom, students, teachers, reset_password
 
 urlpatterns = [
     path('', include('classroom.urls')),
@@ -25,7 +25,15 @@ urlpatterns = [
     path('accounts/signup/teacher/', teachers.TeacherSignUpView.as_view(), name='teacher_signup'),
     path('accounts/login',classroom.LoginView.as_view(),name='login'),
     path('students/activate/<uidb64>/<token>/',students.VerificationView.as_view(),name="activate1"),
-     path('teachers/activate/<uidb64>/<token>/',teachers.VerificationView.as_view(),name="activate")
+    path('teachers/activate/<uidb64>/<token>/',teachers.VerificationView.as_view(),name="activate"),
+
+    path('password-reset/', reset_password.ResetPasswordView.as_view(), name='password_reset'),
+    path('password-reset-confirm/<uidb64>/<token>/',
+         auth_views.PasswordResetConfirmView.as_view(template_name='reset_password/password_reset_confirm.html', form_class=reset_password.AbstractUserSetPasswordForm),
+         name='password_reset_confirm'),
+    path('password-reset-complete/',
+         auth_views.PasswordResetCompleteView.as_view(template_name='reset_password/password_reset_complete.html'),
+         name='password_reset_complete'),
     #  path('accounts/register/student',classroom.LoginView.student_signup,name='register'),
 
 ]
