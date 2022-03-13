@@ -1,9 +1,139 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="container">
+<style>
+
+    h2
+    {
+    text-align: center;
+    }
+    
+    #formbox
+    {
+        max-width: 100vw;
+        border-radius: 25px;
+    }
+    
+    
+      main
+      {
+        min-height: 88vh;
+        background: linear-gradient(to right top, #fbe8ea, #ffafcc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    
+      .contain
+      {
+          background:white;
+          min-height: 80vh;
+          width:60%;
+          background:linear-gradient(to right bottom, rgba(255,255,255,0.7),rgba(255,255,255,0.3));
+          border-radius: 2rem;
+          backdrop-filter: blur(2rem);
+          z-index: 1;
+          display: flex;
+      }
+    
+      .circle1,.circle2
+      {
+        background:white;
+        background:linear-gradient(to right bottom, rgba(255,255,255,1),rgba(255,255,255,0.5));
+        height: 20rem;
+        width: 20rem;
+        position: absolute;
+        border-radius: 50%;
+      }
+    
+      .circle1
+      {
+        top:20%;
+        right:10%;
+        z-index: 0;
+      }
+    
+      .circle2
+      {
+        bottom:5%;
+        left:10%;
+        z-index: 0;
+      }
+    
+      .image
+      {
+          flex: 1;
+          display:flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background:linear-gradient(to right bottom, rgba(255,255,255,0.7),rgba(255,255,255,0.3));
+          border-radius: 2rem;
+      }
+    
+      .mytable
+      {
+          flex:2;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          justify-content:center;
+      }
+    
+      #myimg
+      {
+          width:100%;
+          height: auto;
+          
+      }
+    
+      .txt
+      {
+          color:#f05d87;
+          font-weight:600;
+          opacity: 0.8;
+          font-family: "Poppins",sans-serif;
+      }
+    
+      h1
+      {
+          font-size: 3vw;
+      }
+      
+    </style>
+
+
+<main>
+    <section class="contain">
+        <div class="image">
+            <img id="myimg" src="{% static 'img/delete.svg' %}" class="d-none d-md-block p-5" alt="assets/portfolio.svg">
+        </div>
+
+        <div class="mytable">
+            <h1 class="txt">Confirm Deletion</h1>
+            <p class="lead">
+                Are you sure you want to delete the quiz
+                <strong>"{{ quiz.name }}"</strong>
+                ? There is no going back.
+            </p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-lg">Yes, I'm sure</button>
+                <a href="{% url 'teachers:quiz_change' quiz.pk %}" class="btn btn-outline-secondary btn-lg" role="button">Nevermind</a>
+            </form>
+        </div>
+
+    </section>
+    <div class="circle1 d-none d-md-block"></div>
+    <div class="circle2 d-none d-md-block"></div>
+</main>
+
+
+
+<!-- <div class="container">
+    <br>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -15,6 +145,7 @@
             <li class="breadcrumb-item active" aria-current="page">Confirm deletion</li>
         </ol>
     </nav>
+
     <h2 class="mb-3">Confirm deletion</h2>
     <p class="lead">
         Are you sure you want to delete the quiz
@@ -26,5 +157,5 @@
         <button type="submit" class="btn btn-danger btn-lg">Yes, I'm sure</button>
         <a href="{% url 'teachers:quiz_change' quiz.pk %}" class="btn btn-outline-secondary btn-lg" role="button">Nevermind</a>
     </form>
-</div>
+</div> -->
 {% endblock %}
