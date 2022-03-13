@@ -165,7 +165,7 @@
                 </div>
             </div>
         </nav>
-        <div class="card-body">
+        <div class="">
                 {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
                 {{ message }}
@@ -182,6 +182,10 @@
         </div>
         <div>
             {% block content %} {% endblock %}
+        </div>
+        <div class="mb-2">
+            <p></p>
+            <p></p>
         </div>
         <footer>
             <div class="footer-content">
