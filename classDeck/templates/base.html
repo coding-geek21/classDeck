@@ -1,20 +1,25 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}ClassDeck{% endblock %}</title>
-    <link rel="shortcut icon" href="{% static 'img/logo.png' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <style>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>{% block title %}ClassDeck{% endblock %}</title>
+        <link rel="shortcut icon" href="{% static 'img/logo.png' %}">
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+            crossorigin="anonymous"
+        >
+        <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+        <style>
         body {
             background-color: #FAE8EB;
         }
@@ -55,61 +60,170 @@
             background-color: #F05D87;
             color: white;
         }
-    </style>
-</head>
-
-<body>
-    <nav id="header" class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand logo" href="{% url 'home' %}">
-                <img src="{% static 'img/logo.png' %}" style="width:auto">
-                <img src="{% static 'img/logo-text.png' %}" style="width:30%;"> {% if user.is_authenticated %} {% if user.is_teacher %}
-                <span class="icon-feather" data-toggle="tooltip" data-placement="right" title="Teacher profile"></span> {% else %}
-                <span class="icon" data-toggle="tooltip" data-placement="right" title="Student profile"></span> {% endif %} {% endif %}
-            </a>
-            <div class="navbar-end">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <p class="text-white">
-                            Logged in as
-                            <strong>{{ user.username }}</strong>
-                        </p>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="login-navbtn" href="{% url 'logout' %}">Log out</a>
-                    </li>
+        #logo_img{
+            height: 50px;
+        }
+        #logo_txt{
+            margin-top: 5px;
+        }
+        footer{
+            height: auto;
+            width: 100;
+            padding-top: 20px;
+            color: #fff;
+        }
+        .footer-content{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+        .footer-content h3{
+            font-size: 1.8rem;
+            font-weight: 400;
+            text-transform: capitalize;
+            line-height: 1rem;
+            margin-bottom: 10px;
+        }
+        .footer-content p{
+            max-width: 80vw;
+            margin: 10px auto;
+            line-height: 28px;
+            font-size: 14px;
+        }
+        .socials{
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1rem 0 1rem 0;
+        }
+        .socials li{
+            margin: 0 10px; 
+        }
+        .socials a{
+            border: 2px solid #F05D87;
+            padding: 2px 6px;
+            border-radius: 100%;
+            text-decoration: none;
+            color: #fff;
+        }
+        .socials a i{
+            font-size: 1.1rem;
+            transition:  color .4s ease;
+        }
+        .socials a:hover{
+            background-color: #F05D87;
+            color: white;
+        }
+        </style>
+    </head>
+    <body>
+        <nav id="header" class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a class="navbar-brand logo" href="{% url 'home' %}">
+                    <img src="{% static 'img/logo.png' %}" style="width:auto">
+                    <img src="{% static 'img/logo-text.png' %}" style="width:30%;">
+                    {% if user.is_authenticated %} {% if user.is_teacher %}
+                    <span
+                        class="icon-feather"
+                        data-toggle="tooltip"
+                        data-placement="right"
+                        title="Teacher profile"
+                    ></span>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" id="login-navbtn" href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="login-navbtn" href="{% url 'signup' %}">Sign up</a>
-                    </li>
-                    {% endif %}
-                </ul>
+                    <span
+                        class="icon"
+                        data-toggle="tooltip"
+                        data-placement="right"
+                        title="Student profile"
+                    ></span>
+                    {% endif %} {% endif %}
+                </a>
+                <div class="navbar-end">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <p class="text-white">
+                                Logged in as
+                                <strong>{{ user.username }}</strong>
+                            </p>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="login-navbtn" href="{% url 'logout' %}">Log out</a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" id="login-navbtn" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="login-navbtn" href="{% url 'signup' %}">Sign up</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            {% for message in messages %}
+        </nav>
+        <div class="">
+                {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
                 {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button
+                    type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             {% endfor %}
         </div>
-    </nav>
-    <div>
-        {% block content %} {% endblock %}
-    </div>
-    <footer style="margin-top:18%;">
-        <p class="mt-2">Copyright © 2021 ClassDeck</p>
-    </footer>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript"></script>
-</body>
+        <div>
+            {% block content %} {% endblock %}
+        </div>
+        <div class="mb-2">
+            <p></p>
+            <p></p>
+        </div>
+        <footer>
+            <div class="footer-content">
+                <div class="logo">
+                    <img id="logo_img" src="{% static 'img/logo.png' %}" style="width:auto">
+                    <img id="logo_txt" src="{% static 'img/logo-text.png' %}" style="width:30%;">
+                </div>
+                <p>ClassDeck aims to provide a virtual classroom that breaks the synchronous hurdles of location, place, student limits and cater the knowledge to the learning crowd anytime and anywhere.</p>
+                <ul class="socials">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-google"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p class="mt-2">Copyright © 2021 ClassDeck</p>
+            </div>
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script type="text/javascript"></script>
+    </body>
 </html>

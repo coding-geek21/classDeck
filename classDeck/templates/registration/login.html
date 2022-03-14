@@ -22,8 +22,9 @@
                     <label for="password" class="label">Password</label>
                     <input type="password" class="form-control input-field" name="password" id="password">
                 </div>
-                <div class="form-group">
+                <div class="form-group d-flex justify-content-between">
                     <button type="submit" class="btn btn-success btn-login">Login</button>
+                    <a class="mt-2" href={% url 'password_reset' %}>Forgot password?</a>
                     <br>
                 </div>
             </form>

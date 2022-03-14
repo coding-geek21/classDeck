@@ -9,12 +9,16 @@ urlpatterns = [
     path('acc/', include('allauth.urls')),
     path('', classroom.home, name='home'),
 
+
     path('students/', include(([
         path('', students.HomeView.as_view(), name='student_home'),
         path('viewquiz', students.QuizListView.as_view(), name='quiz_list'),
         path('interests/', students.StudentInterestsView.as_view(), name='student_interests'),
         path('taken/', students.TakenQuizListView.as_view(), name='taken_quiz_list'),
         path('quiz/<int:pk>/', students.take_quiz, name='take_quiz'),
+        path('activate/<uidb64>/<token>/',students.VerificationView.as_view(),name="activate")
+
+       
     ], 'classroom'), namespace='students')),
 
     path('teachers/', include(([
@@ -27,5 +31,6 @@ urlpatterns = [
         path('quiz/<int:pk>/question/add/', teachers.question_add, name='question_add'),
         path('quiz/<int:quiz_pk>/question/<int:question_pk>/', teachers.question_change, name='question_change'),
         path('quiz/<int:quiz_pk>/question/<int:question_pk>/delete/', teachers.QuestionDeleteView.as_view(), name='question_delete'),
+         path('/activate/<uidb64>/<token>/',teachers.VerificationView.as_view(),name="activate")
     ], 'classroom'), namespace='teachers')),
 ]
