@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Poppins',sans-serif;
+}
+body{
+height: 100vh;
+width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
+background: #fae9fb;
+position: relative;
+}
+body::before{
+content: '';
+position: absolute;
+height: 100%;
+width: 100%;
+left: 0;
+top: 0;
+background: #ba24c2;
+clip-path: polygon(86% 0, 100% 0, 100% 100%, 60% 100%);
+}
+.container{
+z-index: 12;
+max-width: 1050px;
+width: 100%;
+background: #fff;
+border-radius: 12px;
+margin: 0 20px;
+box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+.container .content{
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 25px 20px;
+}
+.content .image-box{
+max-width: 55%;
+}
+.content .image-box img{
+width: 100%;
+}
+.content .topic{
+font-size: 22px;
+font-weight: 500;
+color: #ba24c2;
+}
+.content form{
+width: 40%;
+margin-right: 30px;
+}
+.content .input-box{
+height: 50px;
+width: 100%;
+margin: 16px 0;
+position: relative;
+}
+.content .input-box input{
+position: absolute;
+height: 100%;
+width: 100%;
+border-radius: 6px;
+font-size: 16px;
+outline: none;
+padding-left: 16px;
+background: #fae9fb;
+border: 2px solid transparent;
+transition: all 0.3s ease;
+}
+.content .input-box input:focus,
+.content .input-box input:valid{
+border-color: #ba24c2;
+background-color: #fff;
+}
+.content .input-box label{
+position: absolute;
+left: 18px;
+top: 50%;
+color: #636c72;
+font-size: 15px;
+pointer-events: none;
+transform: translateY(-50%);
+transition: all 0.3s ease;
+}
+.content .input-box input:focus ~ label,
+.content .input-box input:valid ~ label{
+top: 0;
+left: 12px;
+display: 14px;
+color: #ba24c2;
+background: #fff;
+}
+
+.content .input-box input[type="submit"]{
+color: #fff;
+background: #ba24c2;
+padding-left: 0;
+font-size: 18px;
+font-weight: 500;
+cursor: pointer;
+letter-spacing: 1px;
+transition: all 0.3s ease;
+}
+.content .input-box input[type="submit"]:hover{
+background-color: #d43ddb;
+}
+
+    @media (max-width:800px) {
+        /* .content .image-box {
+            display: none;
+
+        } */
+        .content{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .content form {
+            width: 100%;
+            margin-right: 30px;
+            margin: 0;
+        }
+    }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="content">
+        <div class="image-box">
+            <img src="./teacher.jpg" alt="">
+        </div>
+
+        <form action="#">
+            <div class="topic">Send us a message</div>
+            <div class="input-box">
+                <input type="text" required>
+                <label for="name">Enter your name</label>
+            </div>
+            <div class="input-box">
+                <input type="text" required>
+                <label for="email">Enter your email</label>
+            </div>
+            <!-- <div class="check-box">
+                <input type="radio" name="category" value="Student">
+                <label for="name">Student</label>
+                <input type="radio" name="category" value="Teacher">
+                <label for="name">Teacher</label>
+            </div> -->
+            <div class="input-box">
+                <input type="text" required>
+                <label for="name">Enter your message</label>
+            </div>
+            <div class="input-box">
+                <input type="submit">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+    
