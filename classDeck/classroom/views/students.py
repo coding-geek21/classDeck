@@ -143,8 +143,14 @@ def take_quiz(request, pk, qno):
     total_unanswered_questions = unanswered_questions.count()
     progress = 100 - round(((total_unanswered_questions - 1) / total_questions) * 100)
     question = quiz_questions[qno - 1]
+    student_answers = student.quiz_answers.filter(answer__question__quiz=quiz)
     if request.method == 'POST':
         form = TakeQuizForm(question=question, data=request.POST)
+        if qno not in unanswered_question_ids:
+            for i in student_answers:
+                if i.answer.question.id == qno:
+                    form = TakeQuizForm(question=question, instance=i, data=request.POST)
+                    break
         if form.is_valid():
             with transaction.atomic():
                 student_answer = form.save(commit=False)
@@ -167,6 +173,12 @@ def take_quiz(request, pk, qno):
                     return redirect('students:quiz_list')
     else:
         form = TakeQuizForm(question=question)
+        if qno not in unanswered_question_ids:
+            for i in student_answers:
+                if i.answer.question.id == qno:
+                    form = TakeQuizForm(question=question, instance=i)
+                    break
+
     return render(request, 'classroom/students/take_quiz_form.html', {
         'quiz': quiz,
         'question': question,
