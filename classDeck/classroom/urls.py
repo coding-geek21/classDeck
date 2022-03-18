@@ -15,7 +15,7 @@ urlpatterns = [
         path('viewquiz', students.QuizListView.as_view(), name='quiz_list'),
         path('interests/', students.StudentInterestsView.as_view(), name='student_interests'),
         path('taken/', students.TakenQuizListView.as_view(), name='taken_quiz_list'),
-        path('quiz/<int:pk>/', students.take_quiz, name='take_quiz'),
+        path('quiz/<int:pk>/<int:qno>/', students.take_quiz, name='take_quiz'),
         path('activate/<uidb64>/<token>/',students.VerificationView.as_view(),name="activate")
 
        
