@@ -79,8 +79,17 @@ class Assignment(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignments')
     name = models.CharField(max_length=255)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='assignements')
+    file = models.FileField(upload_to="assignments/", null=True)
+    uploaded_on = models.DateTimeField(auto_now_add=True, null=True)
+    last_date = models.DateTimeField(auto_now_add=False, null=True)
 
     def __str__(self):
         return self.name
 
+class AssignmentSubmission(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    file = models.FileField(upload_to="submissions/", null=True)
+    score = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True, null=True)
+    late_submission = models.BooleanField(default=False)
 
