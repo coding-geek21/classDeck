@@ -23,6 +23,10 @@ urlpatterns = [
 
     path('teachers/', include(([
         path('', teachers.HomeView.as_view(), name='teacher_home'),
+
+        path('assignment/', teachers.AssignmentListView.as_view(),name='assignment_list'),
+        path('assignment/add/', teachers.CreateAssignmentView.as_view(),name='assignment_add'),
+
         path('quiz/', teachers.QuizListView.as_view(), name='quiz_change_list'),
         path('quiz/add/', teachers.QuizCreateView.as_view(), name='quiz_add'),
         path('quiz/<int:pk>/', teachers.QuizUpdateView.as_view(), name='quiz_change'),
@@ -31,6 +35,7 @@ urlpatterns = [
         path('quiz/<int:pk>/question/add/', teachers.question_add, name='question_add'),
         path('quiz/<int:quiz_pk>/question/<int:question_pk>/', teachers.question_change, name='question_change'),
         path('quiz/<int:quiz_pk>/question/<int:question_pk>/delete/', teachers.QuestionDeleteView.as_view(), name='question_delete'),
+        
         path('/activate/<uidb64>/<token>/',teachers.VerificationView.as_view(),name="activate")
     ], 'classroom'), namespace='teachers')),
 ]

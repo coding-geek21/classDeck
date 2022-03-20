@@ -14,7 +14,7 @@ from django.views import View
 
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
-from ..models import Answer, Question, Quiz, User
+from ..models import Answer, Question, Quiz, User, Assignment, Subject
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
@@ -150,6 +150,33 @@ class QuizDeleteView(DeleteView):
         return self.request.user.quizzes.all()
 
 
+@method_decorator([login_required, teacher_required], name='dispatch')
+class AssignmentListView(View):
+    def get(self, request):
+        context = {'assignments':Assignment.objects.filter(owner=self.request.user)}
+        return render(request, 'classroom/teachers/assignment_list.html',context)
+
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class CreateAssignmentView(View):
+    def get(self,request):
+        query = Subject.objects.all()
+        return render(request, 'classroom/teachers/assignment_add_form.html',{'subjects':query})
+    
+    def post(self,request):
+        name = request.POST['name']
+        subject_id = request.POST['subject']
+        file = request.POST['file']
+        last_date = request.POST['last_date']
+        if name and subject_id and file and last_date:
+            subject = Subject.objects.get(id=subject_id)
+            assignment = Assignment(name=name,subject=subject,file=file,last_date=last_date
+                                    ,owner=self.request.user)
+            assignment.save()
+            messages.success(request, 'The assignment was created successfuly !')
+            return redirect('teachers:assignment_list') 
+
+
 @method_decorator([login_required ], name='dispatch')
 class QuizResultsView(DetailView):
     model = Quiz
@@ -190,7 +217,6 @@ def question_add(request, pk):
         form = QuestionForm()
 
     return render(request, 'classroom/teachers/question_add_form.html', {'quiz': quiz, 'form': form})
-
 
 @login_required
 @teacher_required

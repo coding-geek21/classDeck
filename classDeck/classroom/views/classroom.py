@@ -7,8 +7,6 @@ from ..forms import StudentSignUpForm
 
 class SignUpView(TemplateView):
     template_name = 'registration/register.html'
-    
-
 
 
 def home(request):
