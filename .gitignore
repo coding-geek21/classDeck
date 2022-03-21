@@ -5,7 +5,8 @@ __pycache__
 env/
 venv/
 new/
-classDeck/media/assignments/
-classDeck/media/submissionss/
+
+media/
+
 # JetBrains IDEs (PyCharm, IntelliJ, etc.)
 .idea/
