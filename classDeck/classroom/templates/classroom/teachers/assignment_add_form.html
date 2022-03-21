@@ -157,7 +157,7 @@
         <div class="mytable">
             <h1 class="txt">Create and Manage Assignments</h1>
             <h2 class="txt pt-5">Add a New Assignment</h1>
-            <form method="post" class="p-5" action="{% url 'teachers:assignment_add' %}">
+            <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' %}">
                 {% csrf_token %}
                 <label>Name</label>
                 <input type='text' name="name" id="name" />
@@ -169,7 +169,7 @@
                     {% endfor %}
                 </select>
                 <label>Assignment File</label>
-                <input name="file" id="file" type="file" />
+                <input name="file" accept=".doc, .docx, .pdf, .txt" type="file" />
                 <label>Last Date of submission</label>
                 <input name="last_date" id="last_date" type='date' />
                 <p></p>

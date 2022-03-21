@@ -3,6 +3,9 @@ from django import urls
 from django.contrib import admin
 from .views import classroom, students, teachers
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +29,8 @@ urlpatterns = [
 
         path('assignment/', teachers.AssignmentListView.as_view(),name='assignment_list'),
         path('assignment/add/', teachers.CreateAssignmentView.as_view(),name='assignment_add'),
+        path('assignment/<int:pk>/', teachers.AssignmentView.as_view(),name='assignment'),
+        path('response/<int:pk>/', teachers.ResponseView.as_view(),name='response'),
 
         path('quiz/', teachers.QuizListView.as_view(), name='quiz_change_list'),
         path('quiz/add/', teachers.QuizCreateView.as_view(), name='quiz_add'),
@@ -39,3 +44,5 @@ urlpatterns = [
         path('/activate/<uidb64>/<token>/',teachers.VerificationView.as_view(),name="activate")
     ], 'classroom'), namespace='teachers')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

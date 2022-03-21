@@ -87,9 +87,10 @@ class Assignment(models.Model):
         return self.name
 
 class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE,null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     file = models.FileField(upload_to="submissions/", null=True)
-    score = models.IntegerField()
+    score = models.IntegerField(null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
     late_submission = models.BooleanField(default=False)
 
