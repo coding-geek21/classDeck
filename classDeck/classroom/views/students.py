@@ -9,21 +9,22 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, ListView, UpdateView , TemplateView
+from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
 from ..models import Quiz, Student, TakenQuiz, User
 
 from ..forms import StudentSignUpForm
 from django.core.mail import EmailMessage
-from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 from ..utils import token_generator
 from django.shortcuts import render
 from django import forms
 from django.contrib.sites.models import Site
+
 
 class StudentSignUpView(CreateView):
     model = User
@@ -33,51 +34,47 @@ class StudentSignUpView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'student'
         return super().get_context_data(**kwargs)
-    
-       
 
     def form_valid(self, form, backend='django.contrib.auth.backends.ModelBackend'):
         user = form.save()
-        userEmail=user.email
+        userEmail = user.email
         print(user.email)
-        user.is_active=False
+        user.is_active = False
         user.save()
-      
-        email_subject="Activate your account"
-       
+
+        email_subject = "Activate your account"
+
         # path to view
         # - getting domain we are on
         # -relative url to verification
         # -encode uid
         # -token
-        
-        uidb64=urlsafe_base64_encode(force_bytes(user.pk))
+
+        uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
         current_site = Site.objects.get_current()
         # domain=current_site.domain
-        domain='localhost:8000'
+        domain = 'localhost:8000'
 
         # domain=get_current_site(self.request).domain
         print(domain)
-        link=reverse('activate1',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
+        link = reverse('activate1', kwargs={'uidb64': uidb64, 'token': token_generator.make_token(user)})
         print(link)
-        activate_url='http://'+domain+link
-        email_body='Hi '+user.username+ ' Please use this link to verify your account\n' + activate_url 
+        activate_url = 'http://' + domain + link
+        email_body = 'Hi ' + user.username + ' Please use this link to verify your account\n' + activate_url
 
         email = EmailMessage(
-    email_subject,
-    email_body,
-    'noreply@classDeck.com',
-    [userEmail],
-   
-)       
-        
+            email_subject,
+            email_body,
+            'noreply@classDeck.com',
+            [userEmail],
+
+        )
+
         email.send(fail_silently=False)
-        messages.success(self.request,"Check your mail to activate your account")
-        return render(self.request,'registration/login.html')
+        messages.success(self.request, "Check your mail to activate your account")
+        return render(self.request, 'registration/login.html')
         # login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         # return redirect('students:quiz_list')
- 
-
 
 
 @method_decorator([login_required], name='dispatch')
@@ -103,7 +100,7 @@ class StudentInterestsView(UpdateView):
 @method_decorator([login_required], name='dispatch')
 class QuizListView(ListView):
     model = Quiz
-    ordering = ('name', )
+    ordering = ('name',)
     context_object_name = 'quizzes'
     template_name = 'classroom/students/quiz_list.html'
 
@@ -132,7 +129,7 @@ class TakenQuizListView(ListView):
 
 
 @login_required
-def take_quiz(request, pk):
+def take_quiz(request, pk, qno):
     quiz = get_object_or_404(Quiz, pk=pk)
     student = request.user.student
 
@@ -140,53 +137,69 @@ def take_quiz(request, pk):
         return render(request, 'students/taken_quiz.html')
 
     total_questions = quiz.questions.count()
+    quiz_questions = quiz.questions.all()
     unanswered_questions = student.get_unanswered_questions(quiz)
+    unanswered_question_ids = [question.id for question in unanswered_questions]
     total_unanswered_questions = unanswered_questions.count()
     progress = 100 - round(((total_unanswered_questions - 1) / total_questions) * 100)
-    question = unanswered_questions.first()
-
+    question = quiz_questions[qno - 1]
+    student_answers = student.quiz_answers.filter(answer__question__quiz=quiz)
     if request.method == 'POST':
         form = TakeQuizForm(question=question, data=request.POST)
+        if qno not in unanswered_question_ids:
+            for i in student_answers:
+                if i.answer.question.id == qno:
+                    form = TakeQuizForm(question=question, instance=i, data=request.POST)
+                    break
         if form.is_valid():
             with transaction.atomic():
                 student_answer = form.save(commit=False)
                 student_answer.student = student
                 student_answer.save()
                 if student.get_unanswered_questions(quiz).exists():
-                    return redirect('students:take_quiz', pk)
+                    return redirect('students:take_quiz', pk, student.get_unanswered_questions(quiz).first().id)
                 else:
-                    correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz, answer__is_correct=True).count()
+                    correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz,
+                                                                  answer__is_correct=True).count()
                     score = round((correct_answers / total_questions) * 100.0, 2)
                     TakenQuiz.objects.create(student=student, quiz=quiz, score=score)
                     if score < 50.0:
-                        messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (quiz.name, score))
+                        messages.warning(request, 'Better luck next time! Your score for the quiz %s was %s.' % (
+                            quiz.name, score))
                     else:
-                        messages.success(request, 'Congratulations! You completed the quiz %s with success! You scored %s points.' % (quiz.name, score))
+                        messages.success(request,
+                                         'Congratulations! You completed the quiz %s with success! You scored %s points.' % (
+                                             quiz.name, score))
                     return redirect('students:quiz_list')
     else:
         form = TakeQuizForm(question=question)
+        if qno not in unanswered_question_ids:
+            for i in student_answers:
+                if i.answer.question.id == qno:
+                    form = TakeQuizForm(question=question, instance=i)
+                    break
 
     return render(request, 'classroom/students/take_quiz_form.html', {
         'quiz': quiz,
         'question': question,
         'form': form,
-        'progress': progress
+        'progress': progress,
+        'total_questions': [{"id": i + 1, "status": i + 1 in unanswered_question_ids} for i in range(total_questions)],
+        'prev': qno - 1 if qno - 1 > 0 else False,
+        'next': qno + 1 if qno + 1 <= total_questions else False,
     })
 
 
-
 class VerificationView(TemplateView):
-    def get(self,request,uidb64,token):
+    def get(self, request, uidb64, token):
         print('IN')
-       
-        id=force_text(urlsafe_base64_decode(uidb64))
-        user=User.objects.get(pk=id)
 
-        user.is_active=True
+        id = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=id)
+
+        user.is_active = True
         user.save()
-        messages.success(request,"Account activated successfully")
+        messages.success(request, "Account activated successfully")
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-         
-       
 
-        return render(self.request,'classroom/students/student_home.html')
+        return render(self.request, 'classroom/students/student_home.html')

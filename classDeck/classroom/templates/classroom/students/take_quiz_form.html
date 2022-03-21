@@ -3,11 +3,36 @@
     <div class="progress mb-3 mt-5">
         <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%"></div>
     </div>
-    <h2 class="mb-3">{{ quiz.name }}</h2>
-    <p class="lead">{{ question.text }}</p>
-    <form method="post" novalidate>
-        {% csrf_token %} {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">Next →</button>
-    </form>
+    <div class="row">
+        <div class="col-4">
+            {% for i in total_questions %}
+                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=i.id  %}">
+                    {% if i.status %}
+                        <button class="btn">{{ i.id }}</button>
+                    {% else %}
+                        <button class="btn btn-success">{{ i.id }}</button>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+        <div class="col-8">
+            <h2 class="mb-3">{{ quiz.name }}</h2>
+            <p class="lead">{{ question.id }} {{ question.text }}</p>
+            <form method="post" novalidate>
+                {% csrf_token %} {{ form|crispy }}
+                <button type="submit" class="btn btn-success">Save</button>
+                {% if prev %}
+                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=prev  %}">
+                    <button type="button" class="btn btn-primary">Previous</button>
+                </a>
+                {% endif %}
+                {% if next %}
+                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=next  %}">
+                    <button type="button" class="btn btn-primary">Next</button>
+                </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
