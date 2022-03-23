@@ -149,7 +149,7 @@
             <p><b class='label' >Last date of submission</b> {{assignment.last_date}}</p>
             <br>
             <div class="butto">
-                <a  href="#" class="btn btn-outline-secondary" role="button">Update {{assignment.name}}</a>
+                <a  href="{% url 'teachers:assignment_add' assignment.id %}" class="btn btn-outline-secondary" role="button">Update {{assignment.name}}</a>
             </div>
         </div>
         <div class="mytable">

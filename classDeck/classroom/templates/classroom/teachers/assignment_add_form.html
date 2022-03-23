@@ -155,23 +155,30 @@
         </div>
 
         <div class="mytable">
-            <h1 class="txt">Create and Manage Assignments</h1>
-            <h2 class="txt pt-5">Add a New Assignment</h1>
-            <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' %}">
+            {% if assignment %}
+                <h2 class="txt pt-5">Update {{assignment.name}}</h1>
+            {% else %}
+                <h1 class="txt">Create and Manage Assignments</h1>
+                <h2 class="txt pt-5">Add a New Assignment</h1>
+            {% endif %}
+            {% if assignment.id %}
+            <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' assignment.id %}">
+            {% else %}
+            <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' 0 %}">
+            {% endif %}
                 {% csrf_token %}
                 <label>Name</label>
-                <input type='text' name="name" id="name" />
+                <input value={{assignment.name}} type='text' name="name" id="name" />
                 <label>Subject</label>
-                <select name="subject" >
-                    <option value='0' >Default</option>
+                <select value={{assignment.subject}} name="subject" >
                     {% for subject in subjects %}
                         <option value={{subject.id}} >{{subject.name}}</option>
                     {% endfor %}
                 </select>
                 <label>Assignment File</label>
-                <input name="file" accept=".doc, .docx, .pdf, .txt" type="file" />
+                <input value={{assignment.file}} name="file" accept=".doc, .docx, .pdf, .txt" type="file" />
                 <label>Last Date of submission</label>
-                <input name="last_date" id="last_date" type='date' />
+                <input defaultValue={{assignment.last_date}} name="last_date" id="last_date" type='date' required/>
                 <p></p>
                 <button type="submit" class="btn">Save</button>
                 <a href="{% url 'teachers:assignment_list' %}" class="btn" role="button">Nevermind</a>

@@ -160,22 +160,41 @@ class AssignmentListView(View):
 
 @method_decorator([login_required, teacher_required], name='dispatch')
 class CreateAssignmentView(View):
-    def get(self,request):
+    def get(self,request,pk):
+        assignment = None
+        if pk!=0:
+            assignment = Assignment.objects.get(id=pk)
         query = Subject.objects.all()
-        return render(request, 'classroom/teachers/assignment_add_form.html',{'subjects':query})
+        return render(request, 'classroom/teachers/assignment_add_form.html',{'subjects':query,'assignment':assignment})
     
-    def post(self,request):
+    def post(self,request,pk):
         name = request.POST['name']
-        subject_id = request.POST['subject']
-        file = request.FILES['file']
+        subject = Subject.objects.get(id=request.POST['subject'])
+        try :
+            file = request.FILES['file']
+        except:
+            file = None
         last_date = request.POST['last_date']
-        if name and subject_id and file and last_date:
-            subject = Subject.objects.get(id=subject_id)
-            assignment = Assignment(name=name,subject=subject,file=file,
-                                    last_date=last_date,owner=self.request.user)
-            assignment.save()
-            messages.success(request, 'The assignment was created successfuly !')
-            return redirect('teachers:assignment_list') 
+        if name and subject and last_date:
+            if pk==0:
+                assignment = Assignment(name=name,subject=subject,file=file,
+                                        last_date=last_date,owner=self.request.user)
+                assignment.save()
+                messages.success(request, 'The assignment was created successfuly !')
+                return redirect('teachers:assignment_list') 
+            assignment = Assignment.objects.get(id=assignment_id)
+            assignment.name = name
+            assignment.subject = subject
+            assignment.last_date = last_date
+            if file:
+                assignment.file = file
+                assignment.save(update_fields=['name','subject','file','last_date'])
+            else:
+                assignment.save(update_fields=['name','subject','last_date'])
+            messages.success(request, 'The assignment was updated successfuly !')
+            return redirect('teachers:assignment_list')
+        messages.error(request, 'Few fields were empty ! Try Again !')
+        return redirect('teachers:assignment_list')
 
 
 @method_decorator([login_required, teacher_required], name='dispatch')
@@ -186,16 +205,6 @@ class AssignmentView(View):
         total = len(responses)
         context = {'assignment':assignment, 'responses':responses, 'total':total}
         return render(request, 'classroom/teachers/assignment.html',context)
-    
-    def put(self,request):
-        assignment = Assignment.objects.get(id=request.PUT['id'])
-        assignment.name = request.PUT['name']
-        assignment.subject = Subject.objects.get(id=request.PUT['subject'])
-        assignment.file = request.FILES['file']
-        assignment.last_date = request.PUT['last_date']
-        assignment.save(update_fields=['name','subject','file','last_date'])
-        messages.success(request, 'The assignment was updated successfuly !')
-        return redirect('teachers:')
 
 
 @method_decorator([login_required, teacher_required], name='dispatch')
@@ -207,7 +216,12 @@ class ResponseView(View):
     def post(self,request):
         assignment = AssignmentSubmission.objects.get(id=request.POST['id'])
         assignment.score = request.POST['score']
-        assignment.save(update_fields=['score'])
+        if request.POST['file']:
+            file = request.FILES['file']
+            assignment.file = file
+            assignment.save(update_fields=['score','file'])
+        else :
+            assignment.save(update_fields=['score'])
         messages.success(request, 'The response was scored successfuly !')
         return redirect('teachers:assignment_list') 
 

@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags humanize %}
+
+{% block content %}
+
+<style>
+    h2
+    {
+    text-align: center;
+    }
+
+    #formbox
+    {
+        max-width: 100vw;
+        border-radius: 25px;
+    }
+
+    .btn {
+    border-radius: 8px;
+    transition-duration: 0.4s;
+    background-color: #f05d87;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    }
+    .btn:hover {
+    color: black;
+    background-color: #f1d1d6;
+    box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+      0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn-primary:focus {
+        background-color: #f05d87;
+    }
+
+    main
+    {
+        min-height: 88vh;
+        background: linear-gradient(to right top, #fbe8ea, #ffafcc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contain
+    {
+        background:white;
+        min-height: 80vh;
+        width:60%;
+        background:linear-gradient(to right bottom, rgba(255,255,255,0.7),rgba(255,255,255,0.3));
+        border-radius: 2rem;
+        backdrop-filter: blur(2rem);
+        z-index: 1;
+        display: flex;
+    }
+
+    .circle1,.circle2
+    {
+        background:white;
+        background:linear-gradient(to right bottom, rgba(255,255,255,1),rgba(255,255,255,0.5));
+        height: 20rem;
+        width: 20rem;
+        position: absolute;
+        border-radius: 50%;
+    }
+
+    .circle1
+    {
+        top:20%;
+        right:10%;
+        z-index: 0;
+    }
+
+    .circle2
+    {
+        bottom:5%;
+        left:10%;
+        z-index: 0;
+    }
+
+    .image
+    {
+        flex: 1;
+        display:flex;
+        flex-direction: column;
+        align-items: left;
+        justify-content: center;
+        background:linear-gradient(to right bottom, rgba(255,255,255,0.7),rgba(255,255,255,0.3));
+        border-radius: 2rem;
+        padding:2%;
+    }
+
+    .mytable
+    {
+        flex:2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        margin: 2%;
+    }
+
+    #myimg
+    {
+        width:100%;
+        height: auto;
+        
+    }
+
+    .txt
+    {
+        color:#f05d87;
+        font-weight:500;
+        opacity: 0.8;
+        font-family: "Poppins",sans-serif;
+    }
+
+    h1
+    {
+        font-size: 3vw;
+    }
+    .file {
+        align-items: center;
+        justify-content: center;
+        border-style:thin;
+        padding:2%;
+        border-radius: 8px;
+        font-size:16px;
+        color:white;
+        background-color:rgba(77, 75, 75, 0.959);
+    }
+    .label {
+        font-size:12px;
+    }
+    input {
+        padding:1%;
+        min-width:400px;
+        border-radius: 5px;
+    }
+    input[type="file"]::file-selector-button 
+    {
+    cursor: grab;
+    background-color: rgb(243, 171, 219);
+    font-size: 1em;
+    padding: 2%;
+    border-radius: 5px;
+    color: black;
+    }
+    .btn 
+    {
+        border-radius: 8px;
+        transition-duration: 0.4s;
+        background-color: #f05d87;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+    .btn:hover 
+    {
+        color: black;
+        background-color: #f1d1d6;
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+        0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn-primary:focus 
+    {
+        background-color: #f05d87;
+    }
+</style>
+
+<main>
+    
+    <section class="contain">
+        <div class="image">
+            <h4>{{response.student.user.first_name}} {{response.student.user.last_name}}</h4>
+            <p>{{response.student.user.email}}</p>
+            <p>{{response.assignment.subject}}</p>
+            <p>{{response.date}}</p>
+        </div>
+        <form method="post" enctype="multipart/form-data" action="{% url 'teachers:response' response.id %}" class="mytable">
+            <h3>Submission for</h3>
+            <h2 class="txt">{{response.assignment.name}}</h2>
+            <div class="card">
+                {% if is_student and response.file  %}
+                    <a style="text-decoration:none" href="{{response.file.url}}" class='file' ><i>{{response.file.url}}</i></a>
+                {% elif is_student and not response.file %}
+                    <label>Upload your Response File</label>
+                    <input name="file" accept=".doc, .docx, .pdf" type="file" required/>
+                {% else %}
+                    <a style="text-decoration:none" href="{{response.file.url}}" class='file' >{{response.file}}</a> 
+                {% endif %}
+            </div>
+            {% if response.score != 0 %}
+                <h4>Already Checked </h4>
+                <h4>Score : {{response.score}} </h4>
+            {% else %}
+                <br>
+                <h4>Score</h4>
+                <input type='number' name='score' />
+            {% endif %}
+            <button type="submit" name='id' class="btn">Save</button>
+        </form>
+
+    </section>
+    <div class="circle1 d-none d-md-block"></div>
+    <div class="circle2 d-none d-md-block"></div>
+</main>
+
+
+{% endblock %}
