@@ -12,8 +12,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView , TemplateView
 
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
-from ..models import Quiz, Student, TakenQuiz, User
-
+from ..models import Quiz, Student, TakenQuiz, User, Assignment
+from django.views import View
 from ..forms import StudentSignUpForm
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
@@ -116,6 +116,12 @@ class QuizListView(ListView):
             .annotate(questions_count=Count('questions')) \
             .filter(questions_count__gt=0)
         return queryset
+
+@method_decorator([login_required], name='dispatch')
+class AssignmentListView(View):
+    def get(self, request):
+        assignments = Assignment.objects.all()
+        return render(request, 'classroom/students/assignment_list.html',{'assignments':assignments})
 
 
 @method_decorator([login_required], name='dispatch')

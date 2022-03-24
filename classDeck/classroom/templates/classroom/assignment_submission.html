@@ -140,8 +140,12 @@
     }
     input {
         padding:1%;
+        max-width:200px;
+        
+    }
+    textarea {
+        padding:1%;
         min-width:400px;
-        border-radius: 5px;
     }
     input[type="file"]::file-selector-button 
     {
@@ -189,6 +193,7 @@
             <p>{{response.date}}</p>
         </div>
         <form method="post" enctype="multipart/form-data" action="{% url 'teachers:response' response.id %}" class="mytable">
+            {% csrf_token %}
             <h3>Submission for</h3>
             <h2 class="txt">{{response.assignment.name}}</h2>
             <div class="card">
@@ -202,14 +207,18 @@
                 {% endif %}
             </div>
             {% if response.score != 0 %}
-                <h4>Already Checked </h4>
-                <h4>Score : {{response.score}} </h4>
+                <br>
+                <h5 style='color:green' >Checked </h5>
+                <p>Score : {{response.score}} </p>
+                <p>Remarks : {{response.remarks}}</p>
             {% else %}
                 <br>
-                <h4>Score</h4>
-                <input type='number' name='score' />
+                <input placeholder='Score' type='number' name='score' />
+                <p></p>
+                <textarea placeholder='Any remark for the student ?' name='remarks' ></textarea>
+                <br>
+                <button type="submit" name='id'  class="btn">Submit</button>
             {% endif %}
-            <button type="submit" name='id' class="btn">Save</button>
         </form>
 
     </section>

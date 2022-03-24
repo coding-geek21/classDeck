@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Assignments</h2>
+</div>
+
+<div class="container">
+    <div class="card">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>Assignment</th>
+                    <th>Subject</th>
+                    <th>Last date of submission</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for assignment in assignments %}
+                <tr>
+                    <td class="align-middle">{{ assignment.name }}</td>
+                    <td class="align-middle">{{ assignment.subject.name }}</td>
+                    <td class="align-middle">{{ assignment.last_date }} </td>
+                    <td class="text-right">
+                        <a href="#" class="btn btn-primary">View</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td class="bg-light text-center font-italic" colspan="4">No assignment matching your interests right now.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

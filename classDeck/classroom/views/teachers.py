@@ -175,22 +175,27 @@ class CreateAssignmentView(View):
         except:
             file = None
         last_date = request.POST['last_date']
+        note = 'No note'
+        if request.POST['note']:
+            note = request.POST['note']
         if name and subject and last_date:
             if pk==0:
                 assignment = Assignment(name=name,subject=subject,file=file,
-                                        last_date=last_date,owner=self.request.user)
+                                        last_date=last_date,owner=self.request.user,
+                                        note=note)
                 assignment.save()
                 messages.success(request, 'The assignment was created successfuly !')
                 return redirect('teachers:assignment_list') 
-            assignment = Assignment.objects.get(id=assignment_id)
+            assignment = Assignment.objects.get(id=pk)
             assignment.name = name
             assignment.subject = subject
             assignment.last_date = last_date
+            assignment.note = note
             if file:
                 assignment.file = file
-                assignment.save(update_fields=['name','subject','file','last_date'])
+                assignment.save(update_fields=['name','subject','file','last_date','note'])
             else:
-                assignment.save(update_fields=['name','subject','last_date'])
+                assignment.save(update_fields=['name','subject','last_date','note'])
             messages.success(request, 'The assignment was updated successfuly !')
             return redirect('teachers:assignment_list')
         messages.error(request, 'Few fields were empty ! Try Again !')
@@ -213,15 +218,11 @@ class ResponseView(View):
         submission = AssignmentSubmission.objects.get(id=pk)
         return render(request, 'classroom/assignment_submission.html/',{'response':submission,'is_student':False})
     
-    def post(self,request):
-        assignment = AssignmentSubmission.objects.get(id=request.POST['id'])
+    def post(self,request,pk):
+        assignment = AssignmentSubmission.objects.get(id=pk)
         assignment.score = request.POST['score']
-        if request.POST['file']:
-            file = request.FILES['file']
-            assignment.file = file
-            assignment.save(update_fields=['score','file'])
-        else :
-            assignment.save(update_fields=['score'])
+        assignment.remarks = request.POST['remarks']
+        assignment.save(update_fields=['score','remarks'])
         messages.success(request, 'The response was scored successfuly !')
         return redirect('teachers:assignment_list') 
 

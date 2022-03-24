@@ -132,6 +132,11 @@
         min-width:400px;
         border-radius: 5px;
     }
+    textarea {
+        padding:1%;
+        min-width:400px;
+        border-radius: 5px;
+    }
     select {
         padding:1%;
         min-width:400px;
@@ -179,6 +184,8 @@
                 <input value={{assignment.file}} name="file" accept=".doc, .docx, .pdf, .txt" type="file" />
                 <label>Last Date of submission</label>
                 <input defaultValue={{assignment.last_date}} name="last_date" id="last_date" type='date' required/>
+                <label>Any note for students ?</label>
+                <textarea value={{assignment.note}} name="note" id="note"></textarea>
                 <p></p>
                 <button type="submit" class="btn">Save</button>
                 <a href="{% url 'teachers:assignment_list' %}" class="btn" role="button">Nevermind</a>
