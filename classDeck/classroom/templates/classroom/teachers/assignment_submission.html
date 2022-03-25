@@ -197,16 +197,9 @@
             <h3>Submission for</h3>
             <h2 class="txt">{{response.assignment.name}}</h2>
             <div class="card">
-                {% if is_student and response.file  %}
-                    <a style="text-decoration:none" href="{{response.file.url}}" class='file' ><i>{{response.file.url}}</i></a>
-                {% elif is_student and not response.file %}
-                    <label>Upload your Response File</label>
-                    <input name="file" accept=".doc, .docx, .pdf" type="file" required/>
-                {% else %}
-                    <a style="text-decoration:none" href="{{response.file.url}}" class='file' >{{response.file}}</a> 
-                {% endif %}
+                <a style="text-decoration:none" href="{{response.file.url}}" class='file' ><i>{{response.file.url}}</i></a>
             </div>
-            {% if response.score != 0 %}
+            {% if response.score != none %}
                 <br>
                 <h5 style='color:green' >Checked </h5>
                 <p>Score : {{response.score}} </p>

@@ -216,7 +216,7 @@ class AssignmentView(View):
 class ResponseView(View):
     def get(self,request,pk):
         submission = AssignmentSubmission.objects.get(id=pk)
-        return render(request, 'classroom/assignment_submission.html/',{'response':submission,'is_student':False})
+        return render(request, 'classroom/teachers/assignment_submission.html/',{'response':submission})
     
     def post(self,request,pk):
         assignment = AssignmentSubmission.objects.get(id=pk)

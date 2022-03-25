@@ -20,6 +20,7 @@ urlpatterns = [
         path('taken/', students.TakenQuizListView.as_view(), name='taken_quiz_list'),
         path('quiz/<int:pk>/', students.take_quiz, name='take_quiz'),
         path('assignment/', students.AssignmentListView.as_view(), name='assignment_list'),
+        path('response/add/<int:pk>', students.CreateResponseView.as_view(), name='create_response'),
         path('activate/<uidb64>/<token>/',students.VerificationView.as_view(),name="activate")
 
        

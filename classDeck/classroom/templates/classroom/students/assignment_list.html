@@ -2,7 +2,9 @@
 
 {% block content %}
 <div class="container">
+    <br>
     <h2>Assignments</h2>
+    <br>
 </div>
 
 <div class="container">
@@ -22,9 +24,15 @@
                     <td class="align-middle">{{ assignment.name }}</td>
                     <td class="align-middle">{{ assignment.subject.name }}</td>
                     <td class="align-middle">{{ assignment.last_date }} </td>
+                    {% if assignment.submitted %}
                     <td class="text-right">
-                        <a href="#" class="btn btn-primary">View</a>
+                        <a href="#" class="btn btn-secondary">Submitted</a>
                     </td>
+                    {% else %}
+                    <td class="text-right">
+                        <a href="{% url 'students:create_response' assignment.assignment_id %}" class="btn btn-primary">Submit Response</a>
+                    </td>
+                    {% endif %}
                 </tr>
                 {% empty %}
                 <tr>
