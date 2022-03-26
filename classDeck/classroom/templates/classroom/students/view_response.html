@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<style>
+    .file {
+        padding:2%;
+        border-radius: 6px;
+        font-size:16px;
+        color:white;
+        background-color:rgba(78, 65, 77, 0.856);
+    }
+    h2
+    {
+    text-align: center;
+    }
+
+    #formbox
+    {
+        max-width: 100vw;
+        border-radius: 25px;
+    }
+
+    .btn 
+    {
+        border-radius: 8px;
+        transition-duration: 0.4s;
+        background-color: #f05d87;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+    .btn:hover 
+    {
+        color: black;
+        background-color: #f1d1d6;
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+        0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn-primary:focus 
+    {
+        background-color: #f05d87;
+    }
+
+    main
+    {
+        min-height: 88vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contain
+    {
+        background:white;
+        min-height: 80vh;
+        width:60%;
+        padding:2%;
+        backdrop-filter: blur(2rem);
+        z-index: 1;
+        background-color:#0A014F;
+        display: flex;
+        color:white;
+    }
+
+    .image
+    {
+        flex: 1;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 2rem;
+        margin-right:15px;
+    }
+
+    .mytable
+    {
+        flex:2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        background-color:white;
+        border-radius:2rem;
+        border-style:solid;
+    }
+
+    .txt
+    {
+        color:#f05d87;
+        font-weight:600;
+        opacity: 0.8;
+        font-family: "Poppins",sans-serif;
+    }
+    .txt2{color:black;}
+    h1
+    {
+        font-size: 3vw;
+    }
+    select {
+        padding:1%;
+        min-width:400px;
+        border-radius: 5px;
+    }
+    input[type="file"]::file-selector-button 
+    {
+        border-radius: 8px;
+        transition-duration: 0.4s;
+        background-color: #f05d87;
+        border: none;
+        color: white;
+        padding: 12px 22px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor:grab;
+    }
+    .status {
+        padding:2%;
+        color: white;
+        background-color: green;
+        border-radius: 5px;
+    }
+    .score {
+        padding:3%;
+        margin: 5px;
+        border-style: solid;
+        border-color: grey;
+        border-radius: 5px;
+    }
+</style>
+<main>
+    <section class="contain">
+        <br>
+        <div class="image">
+            <h3>{{response.assignment.name}}</h3>
+            <p>{{response.assingment.subject}}</p>
+            <p>{{response.assignment.note}}</p>
+            <p class='status' >Submitted</p>
+            <div class="card file">
+                <a style="text-decoration:none" href="{{response.assignment.file.url}}" class='file' >DOWNLOAD ASSIGNMENT</a>
+            </div>
+        </div>
+
+        <div class="mytable">
+            <h2 class="txt pt-5">My Submission</h1>
+            {% if response.id %}
+            <form method="post" enctype="multipart/form-data" class="p-5" action="#">
+            {% else %}
+            <form method="post" enctype="multipart/form-data" class="p-5" action="#">
+            {% endif %}
+                {% csrf_token %}
+                <label class="txt2" >Your Submitted File</label>
+                <div class="card file">
+                    <a style="text-decoration:none" href="{{response.file.url}}" class='file' >DOWNLOAD RESPONSE</a>
+                </div>
+                <p class="txt2">Submitted on : {{response.date}} 
+                    {% if response.late_submission %}
+                    <i style='color:red'>Late</i>
+                    {% else %}
+                    <i style='color:green'>On Time</i>
+                    {% endif %}
+                </p>
+                <p class="txt2">Last Date : {{response.assignment.last_date}}</p>
+                {% if response.score != none %}
+                    <div class='score' >
+                        <h5 class='status' >Checked</h5>
+                        <p class="txt2">Score : {{response.score}}</p>
+                        <p class="txt2">Remarks : {{response.remarks}}</p>
+                    </div>
+                {% else %}
+                    <div>
+                        <h5 class='status' style='background-color:red;' >Unchecked</h5>
+                    </div>
+                {%endif%}
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

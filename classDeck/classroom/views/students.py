@@ -161,6 +161,13 @@ class CreateResponseView(View):
 
 
 @method_decorator([login_required], name='dispatch')
+class ResponseView(View):
+    def get(self,request,pk):
+        response = AssignmentSubmission.objects.get(id=pk)
+        return render(request, 'classroom/students/view_response.html',{'response':response})
+
+
+@method_decorator([login_required], name='dispatch')
 class TakenQuizListView(ListView):
     model = TakenQuiz
     context_object_name = 'taken_quizzes'
