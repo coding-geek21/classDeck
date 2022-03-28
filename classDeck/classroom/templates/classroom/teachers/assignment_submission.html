@@ -197,9 +197,9 @@
             <h3>Submission for</h3>
             <h2 class="txt">{{response.assignment.name}}</h2>
             <div class="card">
-                <a style="text-decoration:none" href="{{response.file.url}}" class='file' ><i>{{response.file.url}}</i></a>
+                <a style="text-decoration:none" href="{{response.file.url}}" class='file' ><i>DOWNLOAD ASSIGNMENT RESPONSE</i></a>
             </div>
-            {% if response.score != none %}
+            {% if response.score != 0 %}
                 <br>
                 <h5 style='color:green' >Checked </h5>
                 <p>Score : {{response.score}} </p>

@@ -11,7 +11,6 @@ from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView,TemplateView)
 from django.views import View
-
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
 from ..models import Answer, Question, Quiz, User, Assignment, Subject, AssignmentSubmission
@@ -25,6 +24,7 @@ from django.shortcuts import render
 from django import forms
 from django.contrib.sites.models import Site
 from django.views.decorators.clickjacking import xframe_options_sameorigin
+from .notification import send_notification
 
 
 class TeacherSignUpView(CreateView):
@@ -168,6 +168,7 @@ class CreateAssignmentView(View):
         return render(request, 'classroom/teachers/assignment_add_form.html',{'subjects':query,'assignment':assignment})
     
     def post(self,request,pk):
+        print(pk==0)
         name = request.POST['name']
         subject = Subject.objects.get(id=request.POST['subject'])
         try :
@@ -178,12 +179,17 @@ class CreateAssignmentView(View):
         note = 'No note'
         if request.POST['note']:
             note = request.POST['note']
+        print(pk==0)
         if name and subject and last_date:
+            print(pk==0)
             if pk==0:
                 assignment = Assignment(name=name,subject=subject,file=file,
                                         last_date=last_date,owner=self.request.user,
                                         note=note)
                 assignment.save()
+                print("here")
+                send_notification(assignment)
+                
                 messages.success(request, 'The assignment was created successfuly !')
                 return redirect('teachers:assignment_list') 
             assignment = Assignment.objects.get(id=pk)

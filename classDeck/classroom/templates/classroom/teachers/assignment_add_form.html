@@ -167,25 +167,25 @@
                 <h2 class="txt pt-5">Add a New Assignment</h1>
             {% endif %}
             {% if assignment.id %}
-            <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' assignment.id %}">
+                <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' assignment.id %}">
             {% else %}
-            <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' 0 %}">
+                <form method="post" enctype="multipart/form-data" class="p-5" action="{% url 'teachers:assignment_add' 0 %}">
             {% endif %}
                 {% csrf_token %}
                 <label>Name</label>
-                <input value={{assignment.name}} type='text' name="name" id="name" />
+                <input defaultValue={{assignment.name}} type='text' name="name" id="name" />
                 <label>Subject</label>
-                <select value={{assignment.subject}} name="subject" >
+                <select name='subject' id='subject' >
                     {% for subject in subjects %}
-                        <option value={{subject.id}} >{{subject.name}}</option>
+                        <option type='number' name="subject" id="subject"  value={{subject.id}} >{{subject.name}}</option>
                     {% endfor %}
                 </select>
                 <label>Assignment File</label>
-                <input value={{assignment.file}} name="file" accept=".doc, .docx, .pdf, .txt" type="file" />
+                <input defaultValue={{assignment.file}} id="file" name="file" accept=".doc, .docx, .pdf, .txt" type="file" />
                 <label>Last Date of submission</label>
-                <input defaultValue={{assignment.last_date}} name="last_date" id="last_date" type='date' required/>
+                <input name="last_date" id="last_date" type='date' required/>
                 <label>Any note for students ?</label>
-                <textarea value={{assignment.note}} name="note" id="note"></textarea>
+                <textarea defaultValue={{assignment.note}} type='text' name="note" id="note"></textarea>
                 <p></p>
                 <button type="submit" class="btn">Save</button>
                 <a href="{% url 'teachers:assignment_list' %}" class="btn" role="button">Nevermind</a>

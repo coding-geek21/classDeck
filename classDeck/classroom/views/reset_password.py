@@ -57,3 +57,4 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
                       " If you don't receive an email, " \
                       "kindly check your spam folder."
     success_url = reverse_lazy('home')
+
