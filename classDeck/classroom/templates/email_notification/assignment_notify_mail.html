@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <body style='padding: 2%;border-style: solid;border-radius: 8px;border-color: grey;' >
+        <br>
+
+        <h2>Hey , {{ student }}</h2>
+        <h3>You have a new <i style='color:green' >ASSIGNMENT</i></h3>
+
+        <h3>Assignment Details </h3>
+        <br>
+        {{ assignment.name }}
+        <br>
+        {{ assignment.subject.name }} 
+        <br>
+        {{ assignment.last_date }} <b>Last date of submission<b>
+        <br>
+        <br>
+        <h2><a href="{{url}}" style='border-radius: 8px;transition-duration: 0.4s;background-color: #f05d87;
+                                    border: none;color: white;padding: 6px 12px;text-align: center;
+                                    text-decoration: none;display: inline-block;font-size: 14px;
+                                    justify-content: center;' role="button">
+        View</a></h2>
+        <br>
+
+    </body>
+</html>
