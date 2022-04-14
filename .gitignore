@@ -4,5 +4,9 @@ __pycache__
 
 env/
 venv/
+new/
+
+media/
+
 # JetBrains IDEs (PyCharm, IntelliJ, etc.)
 .idea/

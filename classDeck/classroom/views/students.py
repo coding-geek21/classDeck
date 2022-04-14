@@ -9,11 +9,11 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, ListView, UpdateView, TemplateView
-
+from django.views.generic import CreateView, ListView, UpdateView , TemplateView
+from django.utils import timezone
 from ..forms import StudentInterestsForm, StudentSignUpForm, TakeQuizForm
-from ..models import Quiz, Student, TakenQuiz, User
-
+from ..models import Quiz, Student, TakenQuiz, User, Assignment, AssignmentSubmission
+from django.views import View
 from ..forms import StudentSignUpForm
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes, force_text, DjangoUnicodeDecodeError
@@ -113,6 +113,55 @@ class QuizListView(ListView):
             .annotate(questions_count=Count('questions')) \
             .filter(questions_count__gt=0)
         return queryset
+
+@method_decorator([login_required], name='dispatch')
+class AssignmentListView(View):
+    def get(self, request):
+        student = Student.objects.get(user=self.request.user)
+        data = []
+        assignments = Assignment.objects.all()
+        for i in assignments:
+            assignment = {}
+            assignment['name'] = i.name
+            assignment['subject'] = i.subject
+            assignment['last_date'] = i.last_date
+            assignment['assignment_id'] = i.id
+            if len(AssignmentSubmission.objects.filter(assignment=i,student=student))>0:
+                assignment['submitted'] = True
+                assignment['response_id'] = AssignmentSubmission.objects.filter(assignment=i,student=student)[0].id
+            else :
+                assignment['submitted'] = False
+            data.append(assignment)
+        return render(request, 'classroom/students/assignment_list.html',{'assignments':data})
+
+
+@method_decorator([login_required], name='dispatch')
+class CreateResponseView(View):
+    def get(self,request,pk):
+        assignment = Assignment.objects.get(id=pk)
+        return render(request,'classroom/students/create_response.html',{'assignment':assignment})
+
+    def post(self,request,pk):
+        file = request.FILES['file']
+        today = timezone.now()
+        assignment = Assignment.objects.get(id=pk)
+        late_submission = False
+        if today>assignment.last_date:
+            late_submission = True
+        new = AssignmentSubmission(assignment=assignment,
+                            file=file,
+                            student=Student.objects.get(user=self.request.user),
+                            late_submission=late_submission)
+        new.save()
+        messages.success(request, 'Your response was saved successfuly !')
+        return redirect('students:assignment_list')
+
+
+@method_decorator([login_required], name='dispatch')
+class ResponseView(View):
+    def get(self,request,pk):
+        response = AssignmentSubmission.objects.get(id=pk)
+        return render(request, 'classroom/students/view_response.html',{'response':response})
 
 
 @method_decorator([login_required], name='dispatch')

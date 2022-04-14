@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<style>
+    .file {
+        padding:2%;
+        border-radius: 6px;
+        font-size:16px;
+        color:white;
+        background-color:rgba(78, 65, 77, 0.856);
+    }
+    h2
+    {
+    text-align: center;
+    }
+
+    #formbox
+    {
+        max-width: 100vw;
+        border-radius: 25px;
+    }
+
+    .btn 
+    {
+        border-radius: 8px;
+        transition-duration: 0.4s;
+        background-color: #f05d87;
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+    .btn:hover 
+    {
+        color: black;
+        background-color: #f1d1d6;
+        box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24),
+        0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    }
+
+    .btn-primary:focus 
+    {
+        background-color: #f05d87;
+    }
+
+    main
+    {
+        min-height: 88vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .contain
+    {
+        background:white;
+        min-height: 80vh;
+        width:60%;
+        padding:2%;
+        border-radius: 2rem;
+        backdrop-filter: blur(2rem);
+        z-index: 1;
+        background-color:#0A014F;
+        display: flex;
+        color:white;
+    }
+
+    .image
+    {
+        flex: 1;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 2rem;
+        margin-right:15px;
+    }
+
+    .mytable
+    {
+        flex:2;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content:center;
+        background-color:white;
+        border-radius:2rem;
+        border-style:solid;
+    }
+
+    .txt
+    {
+        color:#f05d87;
+        font-weight:600;
+        opacity: 0.8;
+        font-family: "Poppins",sans-serif;
+    }
+    .txt2{color:black;}
+    h1
+    {
+        font-size: 3vw;
+    }
+    select {
+        padding:1%;
+        min-width:400px;
+        border-radius: 5px;
+    }
+    input[type="file"]::file-selector-button 
+    {
+        border-radius: 8px;
+        transition-duration: 0.4s;
+        background-color: #f05d87;
+        border: none;
+        color: white;
+        padding: 12px 22px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        cursor:grab;
+    }
+
+</style>
+<main>
+    <section class="contain">
+        <br>
+        <div class="image">
+            <h3>{{assignment.name}}</h3>
+            <p>{{assignment.subject}}</p>
+            <p>{{assignment.note}}</p>
+            <p><b>{{assignment.last_date}}</b></p>
+            <div class="card file">
+                <a style="text-decoration:none" href="{{assignment.file.url}}" class='file' >DOWNLOAD ASSIGNMENT</a>
+            </div>
+        </div>
+
+        <div class="mytable">
+            <h2 class="txt pt-5">Submit Response</h1>
+            {% if assignment.id %}
+            <form method="post" enctype="multipart/form-data" class="p-5" action="#">
+            {% else %}
+            <form method="post" enctype="multipart/form-data" class="p-5" action="#">
+            {% endif %}
+                {% csrf_token %}
+                <label class="txt2" >Your Submission File</label>
+                <input class="txt2" value={{assignment.file}} name="file" accept=".doc, .docx, .pdf, .txt" type="file" required/>
+                <p></p>
+                <button type="submit" class="btn">SUBMIT</button>
+            </form>
+        </div>
+    </section>
+</main>
+{% endblock %}

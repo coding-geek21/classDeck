@@ -11,10 +11,9 @@ from django.utils.decorators import method_decorator
 from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
                                   UpdateView,TemplateView)
 from django.views import View
-
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
-from ..models import Answer, Question, Quiz, User
+from ..models import Answer, Question, Quiz, User, Assignment, Subject, AssignmentSubmission
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
@@ -24,6 +23,8 @@ from ..utils import token_generator
 from django.shortcuts import render
 from django import forms
 from django.contrib.sites.models import Site
+from django.views.decorators.clickjacking import xframe_options_sameorigin
+from .notification import send_notification
 
 
 class TeacherSignUpView(CreateView):
@@ -150,6 +151,87 @@ class QuizDeleteView(DeleteView):
         return self.request.user.quizzes.all()
 
 
+@method_decorator([login_required, teacher_required], name='dispatch')
+class AssignmentListView(View):
+    def get(self, request):
+        context = {'assignments':Assignment.objects.filter(owner=self.request.user)}
+        return render(request, 'classroom/teachers/assignment_list.html',context)
+
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class CreateAssignmentView(View):
+    def get(self,request,pk):
+        assignment = None
+        if pk!=0:
+            assignment = Assignment.objects.get(id=pk)
+        query = Subject.objects.all()
+        return render(request, 'classroom/teachers/assignment_add_form.html',{'subjects':query,'assignment':assignment})
+    
+    def post(self,request,pk):
+        print(pk==0)
+        name = request.POST['name']
+        subject = Subject.objects.get(id=request.POST['subject'])
+        try :
+            file = request.FILES['file']
+        except:
+            file = None
+        last_date = request.POST['last_date']
+        note = 'No note'
+        if request.POST['note']:
+            note = request.POST['note']
+        print(pk==0)
+        if name and subject and last_date:
+            print(pk==0)
+            if pk==0:
+                assignment = Assignment(name=name,subject=subject,file=file,
+                                        last_date=last_date,owner=self.request.user,
+                                        note=note)
+                assignment.save()
+                print("here")
+                send_notification(assignment)
+                
+                messages.success(request, 'The assignment was created successfuly !')
+                return redirect('teachers:assignment_list') 
+            assignment = Assignment.objects.get(id=pk)
+            assignment.name = name
+            assignment.subject = subject
+            assignment.last_date = last_date
+            assignment.note = note
+            if file:
+                assignment.file = file
+                assignment.save(update_fields=['name','subject','file','last_date','note'])
+            else:
+                assignment.save(update_fields=['name','subject','last_date','note'])
+            messages.success(request, 'The assignment was updated successfuly !')
+            return redirect('teachers:assignment_list')
+        messages.error(request, 'Few fields were empty ! Try Again !')
+        return redirect('teachers:assignment_list')
+
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class AssignmentView(View):
+    def get(self,request,pk):
+        assignment = Assignment.objects.get(id=pk)
+        responses = AssignmentSubmission.objects.filter(assignment=assignment)
+        total = len(responses)
+        context = {'assignment':assignment, 'responses':responses, 'total':total}
+        return render(request, 'classroom/teachers/assignment.html',context)
+
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class ResponseView(View):
+    def get(self,request,pk):
+        submission = AssignmentSubmission.objects.get(id=pk)
+        return render(request, 'classroom/teachers/assignment_submission.html/',{'response':submission})
+    
+    def post(self,request,pk):
+        assignment = AssignmentSubmission.objects.get(id=pk)
+        assignment.score = request.POST['score']
+        assignment.remarks = request.POST['remarks']
+        assignment.save(update_fields=['score','remarks'])
+        messages.success(request, 'The response was scored successfuly !')
+        return redirect('teachers:assignment_list') 
+
 @method_decorator([login_required ], name='dispatch')
 class QuizResultsView(DetailView):
     model = Quiz
@@ -190,7 +272,6 @@ def question_add(request, pk):
         form = QuestionForm()
 
     return render(request, 'classroom/teachers/question_add_form.html', {'quiz': quiz, 'form': form})
-
 
 @login_required
 @teacher_required

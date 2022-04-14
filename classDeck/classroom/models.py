@@ -48,9 +48,23 @@ class Answer(models.Model):
         return self.text
 
 
+class Assignment(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignments')
+    name = models.CharField(max_length=255)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='assignements')
+    file = models.FileField(upload_to="assignments/", null=True)
+    uploaded_on = models.DateTimeField(auto_now_add=True, null=True)
+    note = models.TextField(null=True,default='No Note')
+    last_date = models.DateTimeField(auto_now_add=False, null=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Student(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     quizzes = models.ManyToManyField(Quiz, through='TakenQuiz')
+    assignments = models.ManyToManyField(Assignment, related_name='assigned_students')
     interests = models.ManyToManyField(Subject, related_name='interested_students')
 
     def get_unanswered_questions(self, quiz):
@@ -75,12 +89,13 @@ class StudentAnswer(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='quiz_answers')
     answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='+')
 
-class Assignment(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='assignments')
-    name = models.CharField(max_length=255)
-    subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='assignements')
 
-    def __str__(self):
-        return self.name
-
+class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    file = models.FileField(upload_to="submissions/", null=True)
+    score = models.IntegerField(null=True)
+    date = models.DateTimeField(auto_now_add=True, null=True)
+    late_submission = models.BooleanField(default=False)
+    remarks = models.TextField(null=True,default='No Remarks')
 

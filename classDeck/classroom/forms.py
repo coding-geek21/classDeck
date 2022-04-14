@@ -4,7 +4,7 @@ from django.db import transaction
 from django.forms.utils import ValidationError
 
 from classroom.models import (Answer, Question, Student, StudentAnswer,
-                              Subject, User)
+                              Subject, User, Assignment)
 
 
 class TeacherSignUpForm(UserCreationForm):
@@ -19,7 +19,6 @@ class TeacherSignUpForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
 
 class StudentSignUpForm(UserCreationForm):
     interests = forms.ModelMultipleChoiceField(
@@ -49,7 +48,6 @@ class StudentInterestsForm(forms.ModelForm):
         widgets = {
             'interests': forms.CheckboxSelectMultiple
         }
-
 
 class QuestionForm(forms.ModelForm):
     class Meta:
