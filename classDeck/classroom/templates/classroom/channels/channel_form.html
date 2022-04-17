@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="container my-3">
+    <h4>Create a Channel</h4>
+      <form method="POST" action="{% url 'channels:create' %}" id="groupForm">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" value="Create" class="btn btn-primary btn-large">
+      </form>
+    </div>
+
+{% endblock %}

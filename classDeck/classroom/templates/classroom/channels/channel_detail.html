@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+<h1>{{channel.name}}</h1>
+<h2> Member Count: {{channel.members.count}}</h2>
+    <div id="demo"></div>
+  <div class="content">
+
+    {% if user.is_student %}
+				{% if user in channel.members.all %}
+					<a href="{% url 'channels:leave' slug=channel.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-remove-circle"></span> Leave</a>
+				{% else %}
+					<a href="{% url 'channels:join' slug=channel.slug %}" class="btn btn-lg btn-fill btn-warning"><span class="glyphicon glyphicon-ok-circle"></span> Join</a>
+				{% endif %}
+    {% endif %}
+
+
+</div>
+</div>
+
+<script>
+document.getElementById("demo").innerHTML =
+"Share the below link for students to join:<br>" + window.location.href;
+</script>
+
+{% endblock %}

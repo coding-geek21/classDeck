@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.html import escape, mark_safe
+from django.utils.text import slugify
+from django.urls import reverse
 
 
 class User(AbstractUser):
@@ -54,7 +56,7 @@ class Assignment(models.Model):
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, related_name='assignements')
     file = models.FileField(upload_to="assignments/", null=True)
     uploaded_on = models.DateTimeField(auto_now_add=True, null=True)
-    note = models.TextField(null=True,default='No Note')
+    note = models.TextField(null=True, default='No Note')
     last_date = models.DateTimeField(auto_now_add=False, null=True)
 
     def __str__(self):
@@ -97,5 +99,36 @@ class AssignmentSubmission(models.Model):
     score = models.IntegerField(null=True)
     date = models.DateTimeField(auto_now_add=True, null=True)
     late_submission = models.BooleanField(default=False)
-    remarks = models.TextField(null=True,default='No Remarks')
+    remarks = models.TextField(null=True, default='No Remarks')
 
+
+class Channel(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    admin = models.CharField(max_length=255)
+    slug = models.SlugField(allow_unicode=True, unique=True)
+    description = models.TextField(blank=True, default='')
+    members = models.ManyToManyField(User, through="ChannelMember")
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse("channels:single", kwargs={"slug": self.slug})
+
+    class Meta:
+        ordering = ["name"]
+
+
+class ChannelMember(models.Model):
+    channel = models.ForeignKey(Channel, related_name="memberships", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='user_channels', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+    class Meta:
+        unique_together = ("channel", "user")
