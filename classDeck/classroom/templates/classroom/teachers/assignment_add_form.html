@@ -173,7 +173,7 @@
             {% endif %}
                 {% csrf_token %}
                 <label>Name</label>
-                <input defaultValue={{assignment.name}} type='text' name="name" id="name" />
+                <input value={{assignment.name}} type='text' name="name" id="name" />
                 <label>Subject</label>
                 <select name='subject' id='subject' >
                     {% for subject in subjects %}
@@ -185,7 +185,7 @@
                 <label>Last Date of submission</label>
                 <input name="last_date" id="last_date" type='date' required/>
                 <label>Any note for students ?</label>
-                <textarea defaultValue={{assignment.note}} type='text' name="note" id="note"></textarea>
+                <textarea value={{assignment.note}} type='text' name="note" id="note"></textarea>
                 <p></p>
                 <button type="submit" class="btn">Save</button>
                 <a href="{% url 'teachers:assignment_list' %}" class="btn" role="button">Nevermind</a>

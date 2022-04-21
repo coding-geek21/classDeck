@@ -207,6 +207,16 @@ class CreateAssignmentView(View):
         messages.error(request, 'Few fields were empty ! Try Again !')
         return redirect('teachers:assignment_list')
 
+@method_decorator([login_required, teacher_required], name='dispatch')
+class DeleteAssignmentView(View):
+    def get(self,request,pk):
+        assignment = Assignment.objects.filter(id=pk)
+        if len(assignment)>0:
+            assignment[0].delete()
+            messages.success(request, 'The assignment was deleted successfuly !')
+            return redirect('teachers:assignment_list')
+        messages.success(request, 'Oops ! Looks like the assignment was already deleted ')
+        return redirect('teachers:assignment_list')
 
 @method_decorator([login_required, teacher_required], name='dispatch')
 class AssignmentView(View):
