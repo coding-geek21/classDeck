@@ -54,8 +54,8 @@ class TeacherSignUpView(CreateView):
         uidb64=urlsafe_base64_encode(force_bytes(user.pk))
         current_site = Site.objects.get_current()
         # domain=current_site.domain
-        domain='localhost:8000'
-
+        #domain='localhost:8000'
+        domain = Site.objects.get_current()
         # domain=get_current_site(self.request).domain
         print(domain)
         link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
@@ -207,6 +207,16 @@ class CreateAssignmentView(View):
         messages.error(request, 'Few fields were empty ! Try Again !')
         return redirect('teachers:assignment_list')
 
+@method_decorator([login_required, teacher_required], name='dispatch')
+class DeleteAssignmentView(View):
+    def get(self,request,pk):
+        assignment = Assignment.objects.filter(id=pk)
+        if len(assignment)>0:
+            assignment[0].delete()
+            messages.success(request, 'The assignment was deleted successfuly !')
+            return redirect('teachers:assignment_list')
+        messages.success(request, 'Oops ! Looks like the assignment was already deleted ')
+        return redirect('teachers:assignment_list')
 
 @method_decorator([login_required, teacher_required], name='dispatch')
 class AssignmentView(View):

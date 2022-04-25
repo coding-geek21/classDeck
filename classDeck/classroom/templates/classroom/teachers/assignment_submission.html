@@ -183,13 +183,23 @@
     {
         background-color: #f05d87;
     }
+    .remarks {
+        margin-top: 5px;
+        border-radius:12px;
+        padding: 3%;
+        background-color: white;
+    }
 </style>
 
 <main>
     
     <section class="contain">
         <div class="image">
+            {% if response.student.user.first_name %}
             <h4>{{response.student.user.first_name}} {{response.student.user.last_name}}</h4>
+            {% else %}
+            <h4>{{response.student.user.username}}</h4>
+            {% endif %}
             <p>{{response.student.user.email}}</p>
             <p>{{response.assignment.subject}}</p>
             <p>{{response.date}}</p>
@@ -201,16 +211,18 @@
             <div class="card">
                 <a style="text-decoration:none" href="{{response.file.url}}" class='file' ><i>DOWNLOAD ASSIGNMENT RESPONSE</i></a>
             </div>
-            {% if response.score != 0 %}
+            {% if response.score != None %}
+            <div class='remarks' >
                 <br>
                 <h5 style='color:green' >Checked </h5>
                 <p>Score : {{response.score}} </p>
                 <p>Remarks : {{response.remarks}}</p>
+            </div>
             {% else %}
                 <br>
-                <input placeholder='Score' type='number' name='score' />
+                <input placeholder='Score' type='number' name='score' required/>
                 <p></p>
-                <textarea placeholder='Any remark for the student ?' name='remarks' ></textarea>
+                <textarea placeholder='Any remark for the student ?' name='remarks' required></textarea>
                 <br>
                 <button type="submit" name='id'  class="btn">Submit</button>
             {% endif %}
