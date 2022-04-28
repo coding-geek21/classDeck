@@ -1,16 +1,50 @@
 {% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
+<style>
+    .timer {
+        background-color: rgb(56, 53, 99);
+        border-radius: 12px;
+        padding: 1%;
+        max-width: 17%;
+        color: aliceblue;
+    }
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    
+</style>
 <div class="container">
     <div class="progress mb-3 mt-5">
         <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%"></div>
     </div>
+    <h5 value={{duration}} class="timer" id="timer" >Time Starts</h5>
     <div class="row">
         <div class="col-4">
             {% for i in total_questions %}
-                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=i.id  %}">
+                <a name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=i.id %}">
                     {% if i.status %}
-                        <button class="btn">{{ i.id }}</button>
+                        <button name="navbutton" class="navbutton btn">{{ i.id }}</button>
                     {% else %}
-                        <button class="btn btn-success">{{ i.id }}</button>
+                        <button name="navbutton" class="navbutton btn btn-success">{{ i.id }}</button>
                     {% endif %}
                 </a>
             {% endfor %}
@@ -19,20 +53,59 @@
             <h2 class="mb-3">{{ quiz.name }}</h2>
             <p class="lead">{{ question.id }} {{ question.text }}</p>
             <form method="post" novalidate>
+                <div id="myModal" class="modal">
+
+                    <div class="modal-content">
+                      <p>Time Up</p>
+                      <p>Kindly Submit the quiz.</p>
+                      <button type="submit" class="btn btn-success">Save</button>
+                    </div>
+                  
+                </div>
                 {% csrf_token %} {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Save</button>
                 {% if prev %}
-                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=prev  %}">
-                    <button type="button" class="btn btn-primary">Previous</button>
+                <a name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=prev %}">
+                    <button name="navbutton" type="button" class="navbutton btn btn-primary">Previous</button>
                 </a>
                 {% endif %}
                 {% if next %}
-                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=next  %}">
-                    <button type="button" class="btn btn-primary">Next</button>
+                <a  name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=next %}">
+                    <button name="navbutton" type="button" class="navbutton btn btn-primary">Next</button>
                 </a>
                 {% endif %}
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function countDownTimerStart() {
+        var time = document.getElementById("timer").getAttribute("value");
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementsByClassName("navbutton");
+        btn.onclick = function(){
+            let nav = $('nav');
+            nav.forEach(function(ele,idx){
+                let currentHref = ele.attr("href");
+                let newHref = currentHref + "?time_left=" + time;
+                ele.attr("href",newHref);
+            })
+        }
+        var x = setInterval(function() {
+            var hours = Math.floor((time % (1000*60*60*24))/(1000*60*60));
+            var minutes = Math.floor((time % (1000*60*60))/(1000*60));
+            var seconds = Math.floor((time % (1000*60))/(1000));
+    
+            document.getElementById("timer").innerHTML = " Time Left " + hours + ":" + minutes + ":" + seconds ;
+            time-=1000;
+            if (time<0){
+                clearInterval(x);
+                document.getElementById("timer").innerHTML = "TIME UP";
+                modal.style.display = "block";
+            } 
+        }, 1000);
+    }
+    countDownTimerStart();
+</script> 
 {% endblock %}
