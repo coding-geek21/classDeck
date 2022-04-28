@@ -1,5 +1,8 @@
 {% extends 'base.html' %} {% load crispy_forms_tags %} {% block content %}
 <style>
+  html{
+    scroll-behavior: smooth;
+  }
   .jumbotron {
     background-image: url("https://i.ibb.co/jz5tp65/jumbotron.jpg") !important;
     background-size: cover;
@@ -162,7 +165,7 @@
 </div>
 <div class="container mb-5" id="here">
   <div class="row">
-    <div class="col-lg-4 col-sm-12 col-12">
+    <div class="col-lg-3 col-sm-12 col-12">
       <div class="card text-center" style="width: 15rem; height: 15rem">
         <div class="card-body">
           <a href="{% url 'students:quiz_list' %}">
@@ -171,7 +174,7 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-sm-12 col-12">
+    <div class="col-lg-3 col-sm-12 col-12">
       <div class="card text-center" style="width: 15rem; height: 15rem">
         <div class="card-body">
           <a href="{% url 'students:assignment_list' %}">
@@ -180,11 +183,20 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-sm-12 col-12">
+    <div class="col-lg-3 col-sm-12 col-12">
       <div class="card text-center" style="width: 15rem; height: 15rem">
         <div class="card-body">
           <a href="#">
             <h5 class="cardTitle">View Calendar</h5>
+          </a>
+        </div>
+      </div>
+    </div>
+      <div class="col-lg-3 col-sm-12 col-12">
+      <div class="card text-center" style="width: 15rem; height: 15rem">
+        <div class="card-body">
+          <a href="{% url 'channels:all' %}">
+            <h5 class="cardTitle">Your Channels</h5>
           </a>
         </div>
       </div>

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+    {% if user.is_teacher %}
+        <a class="float-right" href="{% url 'channels:create' %}">
+            <button class="btn btn-primary">Create New Channel</button>
+        </a>
+    {% endif %}
+    <h4>My Channels</h4>
+
+	<div class="list-group">
+		{% for group in object_list %}
+            {% if user.is_teacher %}
+                {% if user.username == group.admin %}
+                    <div class="list-group">
+                      <a href="{% url 'channels:single' slug=group.slug %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-1">{{ group.name }}</h5>
+                          <small>{{ group.members.count }} member{{ group.members.count|pluralize }}</small>
+                        </div>
+                        <p class="mb-1">{{ group.description }}</p>
+                      </a>
+                    </div>
+                {% endif %}
+            {% else %}
+                {% if user in group.members.all %}
+                    <a class="list-group-item" href="{% url 'channels:single' slug=group.slug %}">
+                        <h3 class="title list-group-item-heading">{{ group.name }}</h3>
+                        <div class="list-group-item-text container-fluid">
+                            {{ group.description }}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <span class="badge">{{ group.members.count }}</span> member{{ group.members.count|pluralize }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}
