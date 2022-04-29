@@ -188,11 +188,8 @@ def take_quiz(request, pk, qno):
 
     total_questions = quiz.questions.count()
     quiz_questions = quiz.questions.all()
-    if request.GET.get("time_left"):
-        quiz_duration = int(request.GET.get("time_left"))
-    else :
-        dur = quiz.duration 
-        quiz_duration = dur.hour*60*60*1000 + dur.minute*60*1000 + dur.second*1000
+    dur = quiz.duration 
+    quiz_duration = dur.hour*60*60*1000 + dur.minute*60*1000 + dur.second*1000
     unanswered_questions = student.get_unanswered_questions(quiz)
     unanswered_question_ids = [question.id for question in unanswered_questions]
     total_unanswered_questions = unanswered_questions.count()

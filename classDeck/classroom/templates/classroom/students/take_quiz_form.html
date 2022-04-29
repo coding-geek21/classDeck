@@ -42,9 +42,9 @@
             {% for i in total_questions %}
                 <a name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=i.id %}">
                     {% if i.status %}
-                        <button name="navbutton" class="navbutton btn">{{ i.id }}</button>
+                        <button class="btn">{{ i.id }}</button>
                     {% else %}
-                        <button name="navbutton" class="navbutton btn btn-success">{{ i.id }}</button>
+                        <button class="btn btn-success">{{ i.id }}</button>
                     {% endif %}
                 </a>
             {% endfor %}
@@ -65,13 +65,13 @@
                 {% csrf_token %} {{ form|crispy }}
                 <button type="submit" class="btn btn-success">Save</button>
                 {% if prev %}
-                <a name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=prev %}">
-                    <button name="navbutton" type="button" class="navbutton btn btn-primary">Previous</button>
+                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=prev %}">
+                    <button type="button" class="navbutton btn btn-primary">Previous</button>
                 </a>
                 {% endif %}
                 {% if next %}
-                <a  name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=next %}">
-                    <button name="navbutton" type="button" class="navbutton btn btn-primary">Next</button>
+                <a href="{% url "classroom:take_quiz" pk=quiz.id qno=next %}">
+                    <button type="button" class="navbutton btn btn-primary">Next</button>
                 </a>
                 {% endif %}
             </form>
@@ -80,25 +80,29 @@
 </div>
 
 <script>
+    // Timer function 
     function countDownTimerStart() {
-        var time = document.getElementById("timer").getAttribute("value");
-        var modal = document.getElementById("myModal");
-        var btn = document.getElementsByClassName("navbutton");
-        btn.onclick = function(){
-            let nav = $('nav');
-            nav.forEach(function(ele,idx){
-                let currentHref = ele.attr("href");
-                let newHref = currentHref + "?time_left=" + time;
-                ele.attr("href",newHref);
-            })
+        if (sessionStorage.getItem("time_left")){
+            // Checks if the browser session have any time_left variable
+            var time = sessionStorage.getItem("time_left");
         }
+        else {
+            // Get duration from the timer 
+            var time = document.getElementById("timer").getAttribute("value");
+        }
+        // Force Submit modal
+        var modal = document.getElementById("myModal");
+        // timer logic
         var x = setInterval(function() {
             var hours = Math.floor((time % (1000*60*60*24))/(1000*60*60));
             var minutes = Math.floor((time % (1000*60*60))/(1000*60));
             var seconds = Math.floor((time % (1000*60))/(1000));
-    
+            // Show time in HH:MM:SS
             document.getElementById("timer").innerHTML = " Time Left " + hours + ":" + minutes + ":" + seconds ;
             time-=1000;
+            // Updates the browser variable
+            sessionStorage.setItem("time_left", time-2000);
+            // If time<0 then Force submit pop up 
             if (time<0){
                 clearInterval(x);
                 document.getElementById("timer").innerHTML = "TIME UP";

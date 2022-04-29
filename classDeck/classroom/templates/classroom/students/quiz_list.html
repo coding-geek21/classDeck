@@ -3,6 +3,7 @@
 {% block content %}
   {% include 'classroom/students/_header.html' with active='new' %}
 <div class="container">
+    <h5>Note : <e style="color:blue">CLOSE the browser</e> or OPEN test in a new <e style="color:blue">InPrivate or Incoginito Tab </e></h5>
     <div class="card">
         <table class="table mb-0">
             <thead>
@@ -10,6 +11,7 @@
                     <th>Quiz</th>
                     <th>Subject</th>
                     <th>Length</th>
+                    <th>Duration</th>
                     <th></th>
                 </tr>
             </thead>
@@ -19,6 +21,7 @@
                     <td class="align-middle">{{ quiz.name }}</td>
                     <td class="align-middle">{{ quiz.subject.get_html_badge }}</td>
                     <td class="align-middle">{{ quiz.questions_count }} questions</td>
+                    <td class="align-middle">{{ quiz.duration.hour }}:{{quiz.duration.minute}}</td>
                     <td class="text-right">
                         <a href="{% url 'students:take_quiz' quiz.pk 1 %}" class="btn btn-primary">Start quiz</a>
                     </td>
