@@ -3,7 +3,6 @@
 {% block content %}
   {% include 'classroom/students/_header.html' with active='new' %}
 <div class="container">
-    <h5>Note : <e style="color:blue">CLOSE the browser</e> or OPEN test in a new <e style="color:blue">InPrivate or Incoginito Tab </e></h5>
     <div class="card">
         <table class="table mb-0">
             <thead>
@@ -35,4 +34,9 @@
         </table>
     </div>
 </div>
+<script>
+    if (sessionStorage.getItem("time_left")){
+        sessionStorage.removeItem("time_left");    
+    }
+</script>
 {% endblock %}
