@@ -46,12 +46,15 @@
 <!-- TABLE OF CONTENTS --> 
 
 #### Table of Contents :
-* [Overview](#Overview)
-* [Open Source programs this repo has been part of](#Open-Source-programs-this-repo-has-been-part-of)
-* [Contribution Guidelines](#Contribution-Guidelines)
-* [Project Admin](#Project-Admin)
-* [Contributors](#Contributors)
-* [Feedback](#Feedback)
+- [Overview](#overview)
+    - [Tech-Stack used :](#tech-stack-used-)
+- [Open Source programs this repo has been part of](#open-source-programs-this-repo-has-been-part-of)
+- [Screenshots :-](#screenshots--)
+- [Contribution Guidelines](#contribution-guidelines)
+- [Project Admin](#project-admin)
+- [Contributors](#contributors)
+- [Feedback](#feedback)
+  - [Show some ❤️ by starring this awesome Repository!](#show-some-️-by-starring-this-awesome-repository)
 
 
   
@@ -100,6 +103,33 @@ help to make the whole learning process remote and through virtual platforms.
 <br>
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## Screenshots :-
+<h1>Home Page</h1>
+
+![classdeck](https://user-images.githubusercontent.com/88235823/166154261-b031e2f6-f031-4ab9-a68a-db23882dff4c.PNG)
+
+<h1>Quizzes page</h1>
+
+![clasdeck](https://user-images.githubusercontent.com/88235823/166154268-c43ce3fb-ad14-4864-ba42-39b4c1015962.PNG)
+
+<h1>Login Page </h1>
+
+![classdeck1](https://user-images.githubusercontent.com/88235823/166154282-068680ee-b23f-4b00-987e-51add22ffbc8.PNG)
+
+  <h1>Signin page</h1>
+
+![classdeck2](https://user-images.githubusercontent.com/88235823/166154285-33b58b9f-39fa-4049-ab47-eab65bf31b71.PNG)
+ 
+ <h1>classroom</h1>
+
+![classdeck4](https://user-images.githubusercontent.com/88235823/166154288-b52613b2-74fe-4799-bd72-32c70dd00ee2.PNG)
+
+<h1>quiz</h1>
+
+![clss](https://user-images.githubusercontent.com/88235823/166154290-4adacf4d-4f91-4216-9073-47df788d5aaa.PNG)
+
+<br>
 
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------------ -->
 <!-- ------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
