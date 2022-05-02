@@ -140,17 +140,11 @@ class ChannelMember(models.Model):
 def get_current_year():
     current_Year = datetime.now().year
     return current_Year
-def get_current_month():
-    current_Month = datetime.now().month
-    return current_Month
-def get_current_month_days():
-    current_Date = datetime.now()
-    return calendar.monthrange(current_Date.year, current_Date.month)[1]
 
 class MonthlySchedule(models.Model):
-    month = models.IntegerField(null=False, default=get_current_month)
+    month = models.IntegerField(null=False)
     year = models.IntegerField(null=False,default=get_current_year)
-    days = models.IntegerField(null=False, default=get_current_month_days)
+    days = models.IntegerField(null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -160,6 +154,7 @@ class DailySchedule(models.Model):
     month = models.ForeignKey(MonthlySchedule, on_delete=models.CASCADE)
     day_of_week = models.CharField(max_length=20, null=False)
     day = models.IntegerField(null=False)
+    no_notes = models.IntegerField(null=True, default=0)
     imp = models.BooleanField(default=False)
 
     def __str__(self):

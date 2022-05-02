@@ -48,6 +48,8 @@ urlpatterns = [
                                    path('assignment/<int:pk>/', teachers.AssignmentView.as_view(), name='assignment'),
                                    path('response/<int:pk>/', teachers.ResponseView.as_view(), name='response'),
 
+                                   path('calendar/<int:month>/', teachers.CalendarView.as_view(), name='calendar'),
+
                                    path('quiz/', teachers.QuizListView.as_view(), name='quiz_change_list'),
                                    path('quiz/add/', teachers.QuizCreateView.as_view(), name='quiz_add'),
                                    path('quiz/<int:pk>/', teachers.QuizUpdateView.as_view(), name='quiz_change'),
