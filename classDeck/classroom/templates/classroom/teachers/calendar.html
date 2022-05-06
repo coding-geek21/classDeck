@@ -3,7 +3,6 @@
 {% load crispy_forms_tags humanize %}
 
 {% block content %}
-
 <style>
     h2
     {
@@ -46,8 +45,8 @@
         min-height: 88vh;
         background: linear-gradient(to right top, #fbe8ea, #ffafcc);
         display: flex;
-        align-items: center;
-        justify-content: center;
+        justify-content: left;
+        justify-items: left;
     }
 
     .contain
@@ -60,79 +59,6 @@
         backdrop-filter: blur(2rem);
         z-index: 1;
         display: flex;
-    }
-
-    .circle1,.circle2
-    {
-        background:white;
-        background:linear-gradient(to right bottom, rgba(255,255,255,1),rgba(255,255,255,0.5));
-        height: 20rem;
-        width: 20rem;
-        position: absolute;
-        border-radius: 50%;
-    }
-
-    .circle1
-    {
-        top:20%;
-        right:10%;
-        z-index: 0;
-    }
-
-    .circle2
-    {
-        bottom:5%;
-        left:10%;
-        z-index: 0;
-    }
-
-    .image
-    {
-        flex: 1;
-        display:flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background:linear-gradient(to right bottom, rgba(255,255,255,0.7),rgba(255,255,255,0.3));
-        border-radius: 2rem;
-        padding:2%;
-    }
-
-    .mytable
-    {
-        flex:2;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content:center;
-    }
-
-    #myimg
-    {
-        width:100%;
-        height: auto;
-        
-    }
-
-    .txt
-    {
-        color:#f05d87;
-        font-weight:600;
-        opacity: 0.8;
-        font-family: "Poppins",sans-serif;
-    }
-
-    h1
-    {
-        font-size: 3vw;
-    }
-    .file {
-        border-style:solid;
-        padding:3%;
-        border-radius: 10px;
-        font-size:14px;
-        color:black;
-        background-color:pink;
     }
     .label {
         font-size:12px;
@@ -176,59 +102,65 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+.empty {
+    align-items: center;
+    background-color: white;
+    border-radius: 12px;
+    padding: 7%;
+    max-width: 40%;
+    font-size: 20px;
+}
+.month-div {
+  background-color: white;
+  padding: 3%;
+  align-items: left;
+  justify-content: left;
+}
+.days {
+  background-color: black;
+  border-radius: 20px;
+  padding: 1%;
+  color: white;
+}
+.day {
+  max-width: 16%;
+}
 </style>
 
 <main>
-    {% if month && days %}
-    <section class="contain">
-        <div class="image">
-            <h4></h4>
-            <br>
-            <a style="text-decoration:none" href="" class='file' ><i></i></a>
-            <br>
-            <p><b class='label' >Subject</b> </p>
-            <p><b class='label' >Last date of submission</b> </p>
-            <p><b class='label' >Note</b> </p>
-            <br>
-            <div class="butto">
-                <a  href="#" style="background-color:green;" class="btn btn-outline-secondary" role="button">Update </a>
-            </div>
-            <br>
-            <div class="butto">
-                <button style="background-color:red;" class="btn btn-outline-secondary" role="button" id="myBtn">Delete </button>
-            </div>
+    {% if month and days %}
+    <div class='month-div w3-card'>
+        <h2>{{month_name}} {{month.year}} <button class='days w3-button w3-padding w3-margin-top w3-large'>{{month.days}} days</button> <button class="days w3-button w3-padding w3-margin-top w3-blue w3-large" >{{today.day}} {{today.date}}</button></h2>
+    </div>
+    <div class=' w3-row' >
+      {% for day in days %}
+        {% if day.day == today.day %}
+        <div class='w3-margin day w3-card w3-half w3-white w3-round-large' >
+          <h4 class='w3-padding' ><b class='w3-round-xlarge w3-xlarge w3-blue w3-padding' >{{day.day}}</b> <e class='w3-text-blue w3-right w3-round-large' >{{day.day_of_week}}</e></h4>
+          <div class='w3-blue w3-row w3-round-large w3-padding' >{{day.no_notes}} events</div>
         </div>
-        <div class="mytable">
-            <h1 class="txt"> Responses</h1>
-            <div class="card">
-                <table class="table mb-0">
-                    <thead>
-                        <tr>
-                            <th>Student</th>
-                            <th>Late</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-                <div class="card-footer text-muted">
-                    Total respondents:
-                    <strong></strong>
-                </div>
-            </div>
+        {% else %}
+        <div class='w3-margin day w3-card w3-half w3-white w3-round-large' >
+          <h4 class='w3-padding' ><b class='w3-round-xlarge w3-xlarge w3-black w3-padding' >{{day.day}}</b> <e class='w3-text-green w3-right w3-round-large' >{{day.day_of_week}}</e></h4>
+          <div class='w3-black w3-row w3-round-large w3-padding' >{{day.no_notes}} events</div>
         </div>
-
-    </section>
-    <div class="circle1 d-none d-md-block"></div>
-    <div class="circle2 d-none d-md-block"></div>
+        {% endif %}
+        
+      {% endfor %}
+    </div>
     {% else %}
     <br>
     <br>
     <br>
-    <div>
-        Initialize your Calendar
+    <div class="empty" >
+        Create your Calendar
+        <br>
+        <br>
+        <form method="post" enctype="multipart/form-data" class="butto" action="{% url 'teachers:calendar' 0 %}">
+            {% csrf_token %}
+            <button type="submit" style="background-color:rgb(88, 88, 227);width: 100%;" class="btn btn-outline-secondary">CREATE </button>
+        </form>
     </div>
     {% endif %}
 </main>

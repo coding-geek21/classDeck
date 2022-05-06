@@ -142,7 +142,7 @@ def get_current_year():
     return current_Year
 
 class MonthlySchedule(models.Model):
-    month = models.IntegerField(null=False)
+    month = models.IntegerField(unique=True, null=False)
     year = models.IntegerField(null=False,default=get_current_year)
     days = models.IntegerField(null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

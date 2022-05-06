@@ -57,8 +57,8 @@ class TeacherSignUpView(CreateView):
         current_site = Site.objects.get_current()
         # domain=current_site.domain
         #domain='localhost:8000'
-        domain = Site.objects.get_current()
-        # domain=get_current_site(self.request).domain
+        #domain = Site.objects.get_current()
+        domain=get_current_site(self.request).domain
         print(domain)
         link=reverse('activate',kwargs ={'uidb64':uidb64,'token':token_generator.make_token(user)})
         print(link)
@@ -266,14 +266,29 @@ class QuizResultsView(DetailView):
     def get_queryset(self):
         return self.request.user.quizzes.all()
 
+@method_decorator([teacher_required ], name='dispatch')
 class CalendarView(View):
 
-    def get(self,request,format=None,month=datetime.now().month):
-        month = MonthlySchedule.objects.get(user=self.request.user, year=datetime.now().year, month=month)
-        days = DailySchedule.objects.filter(month=month)
-        return render(request, 'classroom/teachers/calendar.html',{'month':month,'days':days})
+    def get(self,request,month):
+        if month==0:
+            month = datetime.now().month
+        try:
+            months = ['January','February','March','April','May','June','July','August','September','November','December']
+            month = MonthlySchedule.objects.get(user=self.request.user, year=datetime.now().year, month=month)
+            month_name = months[month.month-1] 
+            days = DailySchedule.objects.filter(month=month)
+            today = {}
+            today['date'] = f'{months[datetime.now().month-1]} {datetime.now().year}' 
+            today['day'] = datetime.now().day
+            print("passed")
+        except:
+            month = None
+            days = None
+            month_name=None
+            today = None
+        return render(request, 'classroom/teachers/calendar.html',{'month':month,'days':days,'month_name':month_name,'today':today})
 
-    def post(self,request,format=None):
+    def post(self,request,month):
         # Creates the whole calendar for the year 
         for i in range(1,13):
             current_Date = datetime.now()
@@ -286,8 +301,9 @@ class CalendarView(View):
                 week_day = day_name[calendar.weekday(current_Date.year,i,j)]
                 day = DailySchedule(month=month,
                                     day_of_week=week_day,
-                                    day=i)
-        return redirect('calendar')
+                                    day=j)
+                day.save()
+        return redirect('teachers:calendar',0)
 
 
 @login_required
