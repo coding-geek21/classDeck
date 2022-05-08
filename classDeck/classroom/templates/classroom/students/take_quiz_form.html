@@ -41,7 +41,7 @@
         <div class="col-4">
             {% for i in total_questions %}
                 <a name="nav" href="{% url "classroom:take_quiz" pk=quiz.id qno=i.id %}">
-                    {% if i.status %}
+                    {% if not i.status %}
                         <button class="btn">{{ i.id }}</button>
                     {% else %}
                         <button class="btn btn-success">{{ i.id }}</button>
