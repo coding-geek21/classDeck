@@ -209,7 +209,8 @@ def take_quiz(request, pk, qno):
                 student_answer.student = student
                 student_answer.save()
                 if student.get_unanswered_questions(quiz).exists():
-                    return redirect('students:take_quiz', pk, student.get_unanswered_questions(quiz).first().id)
+                    '''student.get_unanswered_questions(quiz).first().id'''
+                    return redirect('students:take_quiz', pk, qno)
                 else:
                     correct_answers = student.quiz_answers.filter(answer__question__quiz=quiz,
                                                                   answer__is_correct=True).count()
@@ -230,7 +231,6 @@ def take_quiz(request, pk, qno):
                 if i.answer.question.id == qno:
                     form = TakeQuizForm(question=question, instance=i)
                     break
-
     return render(request, 'classroom/students/take_quiz_form.html', {
         'quiz': quiz,
         'question': question,
