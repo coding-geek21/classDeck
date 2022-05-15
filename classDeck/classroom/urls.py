@@ -43,6 +43,8 @@ urlpatterns = [
                                    path('assignment/', teachers.AssignmentListView.as_view(), name='assignment_list'),
                                    path('assignment/add/<int:pk>', teachers.CreateAssignmentView.as_view(),
                                         name='assignment_add'),
+                                   path('assignment/delete/<int:pk>', teachers.DeleteAssignmentView.as_view(),
+                                        name='assignment_delete'),
                                    path('assignment/<int:pk>/', teachers.AssignmentView.as_view(), name='assignment'),
                                    path('response/<int:pk>/', teachers.ResponseView.as_view(), name='response'),
 
