@@ -54,7 +54,6 @@ class TeacherSignUpView(CreateView):
         # -token
         
         uidb64=urlsafe_base64_encode(force_bytes(user.pk))
-        current_site = Site.objects.get_current()
         # domain=current_site.domain
         domain='localhost:8000'
         # domain = Site.objects.get_current()
