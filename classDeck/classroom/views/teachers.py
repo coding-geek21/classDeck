@@ -13,7 +13,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
 from django.views import View
 from ..decorators import teacher_required
 from ..forms import BaseAnswerInlineFormSet, QuestionForm, TeacherSignUpForm
-from ..models import Answer, Question, Quiz, User, Assignment, Subject, AssignmentSubmission
+from ..models import Answer, Question, Quiz, User, Assignment, Subject, AssignmentSubmission, MonthlySchedule, DailySchedule, Note
 from django.core.mail import EmailMessage
 from django.utils.encoding import force_bytes,force_text,DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
@@ -25,6 +25,8 @@ from django import forms
 from django.contrib.sites.models import Site
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from .notification import send_notification
+from datetime import datetime
+import calendar
 
 
 class TeacherSignUpView(CreateView):
@@ -263,6 +265,45 @@ class QuizResultsView(DetailView):
 
     def get_queryset(self):
         return self.request.user.quizzes.all()
+
+@method_decorator([teacher_required ], name='dispatch')
+class CalendarView(View):
+
+    def get(self,request,month):
+        if month==0:
+            month = datetime.now().month
+        try:
+            months = ['January','February','March','April','May','June','July','August','September','November','December']
+            month = MonthlySchedule.objects.get(user=self.request.user, year=datetime.now().year, month=month)
+            month_name = months[month.month-1] 
+            days = DailySchedule.objects.filter(month=month)
+            today = {}
+            today['date'] = f'{months[datetime.now().month-1]} {datetime.now().year}' 
+            today['day'] = datetime.now().day
+            print("passed")
+        except:
+            month = None
+            days = None
+            month_name=None
+            today = None
+        return render(request, 'classroom/teachers/calendar.html',{'month':month,'days':days,'month_name':month_name,'today':today})
+
+    def post(self,request,month):
+        # Creates the whole calendar for the year 
+        for i in range(1,13):
+            current_Date = datetime.now()
+            days = calendar.monthrange(current_Date.year, i)[1]
+            month = MonthlySchedule(month=i, user=self.request.user, days=days)
+            month.save()
+
+            for j in range(1,days+1):
+                day_name = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']
+                week_day = day_name[calendar.weekday(current_Date.year,i,j)]
+                day = DailySchedule(month=month,
+                                    day_of_week=week_day,
+                                    day=j)
+                day.save()
+        return redirect('teachers:calendar',0)
 
 
 @login_required

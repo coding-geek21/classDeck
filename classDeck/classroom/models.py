@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.html import escape, mark_safe
 from django.utils.text import slugify
 from django.urls import reverse
+from datetime import datetime
+import calendar
 
 
 class User(AbstractUser):
@@ -133,3 +135,36 @@ class ChannelMember(models.Model):
 
     class Meta:
         unique_together = ("channel", "user")
+
+
+def get_current_year():
+    current_Year = datetime.now().year
+    return current_Year
+
+class MonthlySchedule(models.Model):
+    month = models.IntegerField(unique=True, null=False)
+    year = models.IntegerField(null=False,default=get_current_year)
+    days = models.IntegerField(null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.month}-{self.year}-{self.user.username}'
+
+class DailySchedule(models.Model):
+    month = models.ForeignKey(MonthlySchedule, on_delete=models.CASCADE)
+    day_of_week = models.CharField(max_length=20, null=False)
+    day = models.IntegerField(null=False)
+    no_notes = models.IntegerField(null=True, default=0)
+    imp = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.month}-{self.month.year}-{self.day}-{self.day_of_week}'
+
+class Note(models.Model):
+    day = models.ForeignKey(DailySchedule, on_delete=models.CASCADE)
+    alert = models.BooleanField(default=False)
+    note = models.CharField(max_length=200, null=True)
+    at = models.TimeField(null=True)
+
+    def __str__(self):
+        return f'{self.month}-{self.day}-{self.day_of_week}-{self.id}'
