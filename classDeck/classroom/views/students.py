@@ -24,7 +24,6 @@ from ..utils import token_generator
 from django.shortcuts import render
 from django import forms
 from django.contrib.sites.models import Site
-import time
 
 
 class StudentSignUpView(CreateView):
@@ -188,8 +187,6 @@ def take_quiz(request, pk, qno):
 
     total_questions = quiz.questions.count()
     quiz_questions = quiz.questions.all()
-    dur = quiz.duration 
-    quiz_duration = dur.hour*60*60*1000 + dur.minute*60*1000 + dur.second*1000
     unanswered_questions = student.get_unanswered_questions(quiz)
     unanswered_question_ids = [question.id for question in unanswered_questions]
     total_unanswered_questions = unanswered_questions.count()
@@ -234,7 +231,6 @@ def take_quiz(request, pk, qno):
     return render(request, 'classroom/students/take_quiz_form.html', {
         'quiz': quiz,
         'question': question,
-        'duration': quiz_duration,
         'form': form,
         'progress': progress,
         'total_questions': [{"id": i + 1, "status": i + 1 in unanswered_question_ids} for i in range(total_questions)],

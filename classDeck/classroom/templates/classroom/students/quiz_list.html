@@ -10,7 +10,6 @@
                     <th>Quiz</th>
                     <th>Subject</th>
                     <th>Length</th>
-                    <th>Duration</th>
                     <th></th>
                 </tr>
             </thead>
@@ -20,7 +19,6 @@
                     <td class="align-middle">{{ quiz.name }}</td>
                     <td class="align-middle">{{ quiz.subject.get_html_badge }}</td>
                     <td class="align-middle">{{ quiz.questions_count }} questions</td>
-                    <td class="align-middle">{{ quiz.duration.hour }}:{{quiz.duration.minute}}</td>
                     <td class="text-right">
                         <a href="{% url 'students:take_quiz' quiz.pk 1 %}" class="btn btn-primary">Start quiz</a>
                     </td>
@@ -34,9 +32,4 @@
         </table>
     </div>
 </div>
-<script>
-    if (sessionStorage.getItem("time_left")){
-        sessionStorage.removeItem("time_left");    
-    }
-</script>
 {% endblock %}

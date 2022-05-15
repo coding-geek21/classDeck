@@ -141,7 +141,6 @@
             <h2 class="txt pt-5">Add a New Quiz</h1>
             <form method="post" class="p-5" novalidate>
                 {% csrf_token %}
-                <h6>Add Duration in the format <e style="color:green;">HH:MM:SS<e> </h6>
                 {{ form|crispy }}
                 <button type="submit" class="btn">Save</button>
                 <a href="{% url 'teachers:quiz_change_list' %}" class="btn" role="button">Nevermind</a>
