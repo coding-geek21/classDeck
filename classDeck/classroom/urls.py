@@ -62,7 +62,7 @@ urlpatterns = [
                                    path('quiz/<int:quiz_pk>/question/<int:question_pk>/delete/',
                                         teachers.QuestionDeleteView.as_view(), name='question_delete'),
 
-                                   path('/activate/<uidb64>/<token>/', teachers.VerificationView.as_view(),
+                                   path('activate/<uidb64>/<token>/', teachers.VerificationView.as_view(),
                                         name="activate")
                                ], 'classroom'), namespace='teachers')),
 ]
