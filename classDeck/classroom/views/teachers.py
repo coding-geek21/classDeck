@@ -32,7 +32,7 @@ import calendar
 class TeacherSignUpView(CreateView):
     model = User
     form_class = TeacherSignUpForm
-    template_name = 'registration/signup_form.html'
+    template_name = 'registration/signup_teacher_form.html'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'teacher'
