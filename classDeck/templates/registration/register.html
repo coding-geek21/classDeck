@@ -13,13 +13,15 @@
     <p class="lead">Select below the type of account you want to create</p>
     <div class="row">
         <div class="col">
+            <h2>Sign up as a Student</h2>
             <a href="{% url 'student_signup' %}" class="btn btn-student btn-lg" role="button">
-                <img src="{% static 'img/student.jpg' %}" class="role">
+                <img src="{% static 'img/student.jpg' %}" style="width:250px; height:200px" class="role">
             </a>
         </div>
         <div class="col">
+            <h2>Sign up as a Teacher</h2>
             <a href="{% url 'teacher_signup' %}" class="btn btn-teacher btn-lg" role="button">
-                <img src="{% static 'img/teacher.jpg' %}" class="role">
+                <img src="{% static 'img/teacher.jpg' %}" style="width:250px; height:200px" class="role">
             </a>
         </div>
     </div>
