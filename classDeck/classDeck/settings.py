@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from django.contrib.messages import constants as messages
 from dotenv import load_dotenv
+from pathlib import Path
 import environ
 
 load_dotenv()
