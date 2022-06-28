@@ -210,3 +210,5 @@ EMAIL_HOST_PASSWORD =  env('EMAIL_HOST_PASSWORD')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
